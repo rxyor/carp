@@ -15,19 +15,24 @@ public interface DistributedLock {
      * 获取锁
      *
      * @param redisKey
-     * @param taskId 任务唯一标识
      * @param timeout 超时时间(秒)
      * @return 是否成功获取锁
      */
-    boolean getLock(String redisKey, String taskId, Long timeout);
+    boolean getLock(String redisKey, Long timeout);
 
     /**
      * 释放锁
      *
      * @param redisKey
-     * @param taskId 任务唯一标识
      * @return 是否能够释放锁
      */
-    boolean releaseLock(String redisKey, String taskId);
+    boolean releaseLock(String redisKey);
+
+    /**
+     * 释放锁
+     *
+     * @return 是否能够释放锁
+     */
+    boolean releaseLock();
 
 }

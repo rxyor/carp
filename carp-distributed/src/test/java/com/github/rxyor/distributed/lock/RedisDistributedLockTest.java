@@ -39,6 +39,13 @@ public class RedisDistributedLockTest {
     @org.junit.Test
     public void getLock() {
         RedisDistributedLock lock = new RedisDistributedLock(redisClient);
-        System.out.println(lock.getLock("key","task_id",300L));
+        System.out.println(lock.getLock("key", 300L));
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            lock.releaseLock();
+        }
     }
 }

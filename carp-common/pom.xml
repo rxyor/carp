@@ -24,10 +24,5 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.github.rxyor</groupId>
-            <artifactId>carp-common-core</artifactId>
-            <version>${carp-common.version}</version>
-        </dependency>
     </dependencies>
 </project>

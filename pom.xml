@@ -127,7 +127,6 @@
 
     <!--构建配置-->
     <build>
-        <finalName>carp</finalName>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -161,4 +160,35 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <!--中心仓库配置-->
+    <distributionManagement>
+        <repository>
+            <id>snapshot</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+        <snapshotRepository>
+            <id>release</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </snapshotRepository>
+    </distributionManagement>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://github.com/rxyor/carp</url>
+        <connection>https://github.com/rxyor/carp.git</connection>
+        <developerConnection>https://github.com/rxyor/carp</developerConnection>
+    </scm>
+    <developers>
+        <developer>
+            <name>rxyor</name>
+            <email>rxyor@outlook.com</email>
+            <url>https://github.com/rxyor</url>
+        </developer>
+    </developers>
 </project>
