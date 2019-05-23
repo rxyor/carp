@@ -1,4 +1,4 @@
-package com.github.rxyor.redis.exception;
+package com.github.rxyor.redis.lettuce.exception;
 
 /**
  *<p>

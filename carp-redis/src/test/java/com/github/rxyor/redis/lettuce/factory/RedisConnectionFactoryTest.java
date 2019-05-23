@@ -1,7 +1,7 @@
-package com.github.rxyor.redis.factory;
+package com.github.rxyor.redis.lettuce.factory;
 
-import com.github.rxyor.redis.config.RedisConnectionProperties;
-import com.github.rxyor.redis.config.RedisConnectionProperties.Pool;
+import com.github.rxyor.redis.lettuce.config.RedisConnectionProperties;
+import com.github.rxyor.redis.lettuce.config.RedisConnectionProperties.Pool;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;

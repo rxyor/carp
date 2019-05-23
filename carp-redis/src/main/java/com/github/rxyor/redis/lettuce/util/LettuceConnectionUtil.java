@@ -1,4 +1,4 @@
-package com.github.rxyor.redis.util;
+package com.github.rxyor.redis.lettuce.util;
 
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;

@@ -2,7 +2,7 @@ package com.github.rxyor.distributed.lock;
 
 import com.github.rxyor.common.util.FileUtil;
 import com.github.rxyor.common.util.RandomUtil;
-import com.github.rxyor.redis.util.LettuceConnectionUtil;
+import com.github.rxyor.redis.lettuce.util.LettuceConnectionUtil;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.ScriptOutputType;
 import io.lettuce.core.api.StatefulRedisConnection;
@@ -106,13 +106,7 @@ public class RedisDistributedLock implements DistributedLock {
 
     @Override
     public boolean releaseLock() {
-        String redisKeyWithPrefix = this.gainRedisKey(null);
-        boolean success = evalRedisScript(LUA_UNLOCK_SCRIPT, new String[]{redisKeyWithPrefix},
-            LOCAL_TASK_IDS.get());
-        if (success) {
-            this.clean();
-        }
-        return success;
+        return this.releaseLock(null);
     }
 
     /**

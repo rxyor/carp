@@ -1,7 +1,8 @@
-package com.github.rxyor.redis.factory;
+package com.github.rxyor.redis.lettuce.factory;
 
-import com.github.rxyor.redis.config.RedisConnectionProperties;
-import com.github.rxyor.redis.exception.CreateRedisConnectionException;
+import com.github.rxyor.redis.lettuce.config.RedisConnectionProperties;
+import com.github.rxyor.redis.lettuce.exception.CreateRedisConnectionException;
+import com.github.rxyor.redis.lettuce.exception.ReleaseRedisConnectionException;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisURI;
 import io.lettuce.core.api.StatefulRedisConnection;
@@ -47,6 +48,17 @@ public class RedisConnectionFactory {
             return pool.borrowObject();
         } catch (Exception e) {
             throw new CreateRedisConnectionException(e);
+        }
+    }
+
+    public void returnConnection(StatefulRedisConnection connection) {
+        try {
+            pool.returnObject(connection);
+        } catch (Exception e) {
+            if (e instanceof IllegalStateException) {
+                return;
+            }
+            throw new ReleaseRedisConnectionException(e);
         }
     }
 

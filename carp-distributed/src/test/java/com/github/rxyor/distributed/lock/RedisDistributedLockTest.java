@@ -1,8 +1,8 @@
 package com.github.rxyor.distributed.lock;
 
-import com.github.rxyor.redis.config.RedisConnectionProperties;
-import com.github.rxyor.redis.config.RedisConnectionProperties.Pool;
-import com.github.rxyor.redis.factory.RedisConnectionFactory;
+import com.github.rxyor.redis.lettuce.config.RedisConnectionProperties;
+import com.github.rxyor.redis.lettuce.config.RedisConnectionProperties.Pool;
+import com.github.rxyor.redis.lettuce.factory.RedisConnectionFactory;
 import io.lettuce.core.RedisClient;
 import java.time.Duration;
 import org.junit.Before;

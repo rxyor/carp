@@ -1,4 +1,4 @@
-package com.github.rxyor.redis.config;
+package com.github.rxyor.redis.lettuce.config;
 
 import java.time.Duration;
 import lombok.Data;
