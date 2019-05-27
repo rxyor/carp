@@ -1,8 +1,8 @@
 package com.github.rxyor.redis.lettuce.factory;
 
 import com.github.rxyor.redis.lettuce.config.RedisConnectionProperties;
-import com.github.rxyor.redis.lettuce.exception.CreateRedisConnectionException;
-import com.github.rxyor.redis.lettuce.exception.ReleaseRedisConnectionException;
+import com.github.rxyor.redis.core.exception.CreateRedisConnectionException;
+import com.github.rxyor.redis.core.exception.ReleaseRedisConnectionException;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisURI;
 import io.lettuce.core.api.StatefulRedisConnection;

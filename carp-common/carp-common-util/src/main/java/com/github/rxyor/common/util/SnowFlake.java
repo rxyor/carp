@@ -106,6 +106,14 @@ public class SnowFlake {
             | sequence;
     }
 
+    public String nextStringId () {
+        return Long.toString(nextId());
+    }
+
+    public String nextHexId () {
+        return Long.toHexString(nextId());
+    }
+
     private long getNextMill() {
         long mill = getNewstmp();
         while (mill <= lastStmp) {
