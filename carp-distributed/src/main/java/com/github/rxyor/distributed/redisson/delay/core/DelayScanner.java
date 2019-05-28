@@ -1,6 +1,5 @@
 package com.github.rxyor.distributed.redisson.delay.core;
 
-import com.github.rxyor.common.core.exception.DuplicateDataException;
 import com.github.rxyor.common.core.thread.CarpDiscardPolicy;
 import com.github.rxyor.common.core.thread.CarpThreadFactory;
 import com.github.rxyor.common.util.ThreadUtil;
@@ -14,6 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -32,16 +32,26 @@ public class DelayScanner {
 
     private List<DelayJobHandler> handlerList = new ArrayList<>(8);
 
+    private AtomicBoolean shutDown = new AtomicBoolean(false);
+
     /**
      * 同步锁
      */
     private final Object LOCK = new Object();
 
+    /**
+     * 线程池
+     */
     private final static ExecutorService POOL = new ThreadPoolExecutor(
         DelayGlobalConfig.getScanThreadNum(), (DelayGlobalConfig.getScanThreadNum()) * 2,
         0L, TimeUnit.SECONDS, new LinkedBlockingDeque<>(4096), new CarpThreadFactory(), new CarpDiscardPolicy());
 
-
+    /**
+     * 添加任务处理器
+     *
+     * @param delayJobHandler 任务处理器
+     * @return Boolean
+     */
     public Boolean addHandler(DelayJobHandler delayJobHandler) {
         Objects.requireNonNull(delayJobHandler, "handler can't be null");
         DelayValidUtil.validateHandlerId(delayJobHandler.getId());
@@ -50,7 +60,7 @@ public class DelayScanner {
         synchronized (LOCK) {
             for (DelayJobHandler handler : handlerList) {
                 if (delayJobHandler.getId().equals(handler.getId())) {
-                    throw new DuplicateDataException("handler has existed");
+                    return false;
                 }
             }
             handlerList.add(delayJobHandler);
@@ -58,6 +68,12 @@ public class DelayScanner {
         return true;
     }
 
+    /**
+     * 移除任务处理器
+     *
+     * @param handlerId 处理器ID
+     * @return Boolean
+     */
     public Boolean removeHandler(String handlerId) {
         if (StringUtils.isEmpty(handlerId)) {
             return false;
@@ -78,35 +94,61 @@ public class DelayScanner {
         return false;
     }
 
+    /**
+     * 清空处理器
+     */
     public void clearHandler() {
         synchronized (LOCK) {
             handlerList.clear();
         }
     }
 
-    public void startup() {
+    /**
+     * 开始扫描和处理任务
+     */
+    public synchronized void startup() {
+        shutDown.set(false);
         scan();
         ThreadUtil.sleepSeconds(5L);
         process();
     }
 
+    /**
+     * 关闭任务
+     */
+    public synchronized void shutDown() {
+        shutDown.set(true);
+        if (POOL != null && !POOL.isShutdown()) {
+            POOL.shutdown();
+        }
+    }
+
+    /**
+     * 扫描出就绪的任务
+     */
     private void scan() {
-        POOL.submit((Runnable) () -> {
-            while (true) {
+        POOL.submit(() -> {
+            while (true && !shutDown.get()) {
                 DelayQueue.pushToReady();
                 ThreadUtil.sleepSeconds(1L);
             }
         });
     }
 
+    /**
+     * 处理任务
+     */
     private void process() {
-        POOL.submit((Runnable) () -> {
-            while (true) {
+        POOL.submit(() -> {
+            while (true && !shutDown.get()) {
                 processJobFromReadyQueue();
             }
         });
     }
 
+    /**
+     * 从就绪队列中取出任务并处理
+     */
     private void processJobFromReadyQueue() {
         if (CollectionUtils.isEmpty(handlerList)) {
             ThreadUtil.sleepSeconds(5 * 60L);
@@ -134,6 +176,10 @@ public class DelayScanner {
         }
     }
 
+    /**
+     * 取出所有处理器的处理任务类型
+     * @return String List
+     */
     private List<String> computeAllTopic() {
         List<String> topics = new ArrayList<>(16);
         for (DelayJobHandler handler : handlerList) {

@@ -21,7 +21,13 @@ import org.redisson.client.protocol.ScoredEntry;
  */
 public class DelayQueue {
 
-    public static <T> void offer(Long jobId, Long execTime) {
+    /**
+     * 添加任务到延时队列
+     *
+     * @param jobId 任务ID
+     * @param execTime 执行时间
+     */
+    public static void offer(Long jobId, Long execTime) {
         DelayValidUtil.validateJobId(jobId);
         DelayValidUtil.validateDelaySeconds(execTime);
         RedissonClient redissonClient = RedissonUtil.ifNullCreateRedissonClient();
@@ -30,10 +36,24 @@ public class DelayQueue {
         rScoredSortedSet.add(execTime, new DelayScoredItem(jobId, execTime));
     }
 
+    /**
+     * 取出当前所有任务项
+     *
+     * @param bucketIndex 任务桶标识
+     * @return DelayScoredItem List
+     */
     public static List<DelayScoredItem> popsNow(Integer bucketIndex) {
         return popsByTime(bucketIndex, 0L, TimeUtil.getCurrentSeconds());
     }
 
+    /**
+     * 取出当前指定任务范围的任务项
+     *
+     * @param bucketIndex 任务桶标识
+     * @param startTimeSecond 任务执行时间-始
+     * @param endTimeSecond 任务执行时间-末
+     * @return DelayScoredItem List
+     */
     public static List<DelayScoredItem> popsByTime(Integer bucketIndex, Long startTimeSecond, Long endTimeSecond) {
         List<DelayScoredItem> delayScoredItemList = new ArrayList<>(64);
         RedissonClient redissonClient = RedissonUtil.ifNullCreateRedissonClient();
@@ -54,6 +74,9 @@ public class DelayQueue {
         return delayScoredItemList;
     }
 
+    /**
+     * 把就绪任务放到就绪队列
+     */
     public static void pushToReady() {
         List<DelayScoredItem> allReadyItemList = new ArrayList<>(16);
         for (int i = 0; i < DelayGlobalConfig.getBuckets(); i++) {

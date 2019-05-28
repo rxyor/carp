@@ -37,6 +37,12 @@ public abstract class AbstractDelayJobHandler implements DelayJobHandler {
      */
     protected abstract DelayResult handleDelayJob(DelayJob delayJob);
 
+    /**
+     * 消费任务
+     *
+     * @param delayJob 任务详情
+     * @return 消费结果
+     */
     @Override
     public DelayResult consume(DelayJob delayJob) {
         DelayResult result;
@@ -50,7 +56,12 @@ public abstract class AbstractDelayJobHandler implements DelayJobHandler {
         return result;
     }
 
-
+    /**
+     * 消费不成功后置处理
+     *
+     * @param result 消费结果
+     * @param delayJob 任务详情
+     */
     private void processResult(DelayResult result, DelayJob delayJob) {
         if (result == null) {
             return;
@@ -67,6 +78,10 @@ public abstract class AbstractDelayJobHandler implements DelayJobHandler {
         }
     }
 
+    /**
+     * 重新放到任务池
+     * @param delayJob 任务详情
+     */
     private void tryPushAgain(DelayJob delayJob) {
         if (delayJob == null
             || delayJob.getId() == null
@@ -80,6 +95,11 @@ public abstract class AbstractDelayJobHandler implements DelayJobHandler {
             delayJob.getRetryTimes() - 1, delayJob.getRetryDelay(), delayJob.getBody());
     }
 
+    /**
+     * 记录消费失败的任务
+     *
+     * @param delayJob 任务详情
+     */
     private void recordFailJob(DelayJob delayJob) {
         if (delayJob == null || delayJob.getId() == null) {
             return;
@@ -91,6 +111,11 @@ public abstract class AbstractDelayJobHandler implements DelayJobHandler {
         rSet.expireAsync(30L, TimeUnit.DAYS);
     }
 
+    /**
+     * handler id
+     *
+     * @return Hex Id
+     */
     @Override
     public String getId() {
         return snowFlake.nextHexId();

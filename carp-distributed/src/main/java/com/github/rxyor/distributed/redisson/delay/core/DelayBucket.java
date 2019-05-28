@@ -18,10 +18,28 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class DelayBucket {
 
+    /**
+     * 添加延时任务
+     *
+     * @param topic 任务类型
+     * @param delaySeconds 延时时间(单位秒)
+     * @param body 消息体
+     * @param <T> 消息类型
+     */
     public static <T> void offer(String topic, Long delaySeconds, T body) {
         offer(topic, delaySeconds, 0, 0L, body);
     }
 
+    /**
+     * 添加延时任务
+     *
+     * @param topic 任务类型
+     * @param delaySeconds 延时时间(单位秒)
+     * @param retryTimes 重试次数
+     * @param retryDelay 重试间隔
+     * @param body 消息体
+     * @param <T> 消息类型
+     */
     public static <T> void offer(String topic, Long delaySeconds, Integer retryTimes, Long retryDelay, T body) {
         DelayValidUtil.validateTopic(topic);
         DelayValidUtil.validateDelaySeconds(delaySeconds);
@@ -34,6 +52,13 @@ public class DelayBucket {
         DelayJobPool.add(delayJob);
     }
 
+    /**
+     * 从就绪队列中取任务
+     *
+     * @param topic 任务类型
+     * @param <T> 消息类型
+     * @return DelayJob
+     */
     public static <T> DelayJob<T> popReady(String topic) {
         DelayValidUtil.validateTopic(topic);
         Long jobId = ReadyQueue.pop(topic);
@@ -45,6 +70,11 @@ public class DelayBucket {
         return delayJob;
     }
 
+    /**
+     * 取出当前所有就绪任务
+     *
+     * @return DelayJob List
+     */
     public static List<DelayJob> popsReady() {
         List<DelayJob> allReadyJobList = new ArrayList<>(16);
         List<DelayScoredItem> allReadyItemList = new ArrayList<>(16);
@@ -66,6 +96,13 @@ public class DelayBucket {
         return allReadyJobList;
     }
 
+    /**
+     * 从任务池中取出任务并删除
+     *
+     * @param jobId 任务ID
+     * @param <T> 任务类型
+     * @return DelayJob
+     */
     private static <T> DelayJob<T> getAndRemoveJobFromJobPool(Long jobId) {
         if (jobId == null) {
             return null;
@@ -77,6 +114,12 @@ public class DelayBucket {
         return delayJob;
     }
 
+    /**
+     * 从就绪队列中删除任务
+     *
+     * @param topic 任务类型
+     * @param jobId 任务ID
+     */
     private static void removeFromReadyQueue(String topic, Long jobId) {
         if (jobId == null || StringUtils.isEmpty(topic)) {
             return;

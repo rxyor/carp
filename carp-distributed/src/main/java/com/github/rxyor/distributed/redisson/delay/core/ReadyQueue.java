@@ -17,6 +17,12 @@ import org.redisson.api.RedissonClient;
 @Slf4j
 public class ReadyQueue {
 
+    /**
+     * 添加就绪任务
+     *
+     * @param topic 任务类型
+     * @param delayJobId 任务ID
+     */
     public static void offer(String topic, Long delayJobId) {
         DelayValidUtil.validateTopic(topic);
         DelayValidUtil.validateJobId(delayJobId);
@@ -25,6 +31,12 @@ public class ReadyQueue {
         rBlockingDeque.offer(delayJobId);
     }
 
+    /**
+     * 取出一个就绪任务
+     *
+     * @param topic 任务类型
+     * @return 任务ID
+     */
     public static Long pop(String topic) {
         DelayValidUtil.validateTopic(topic);
         RedissonClient client = RedissonUtil.ifNullCreateRedissonClient();
@@ -32,6 +44,12 @@ public class ReadyQueue {
         return pop(rBlockingDeque);
     }
 
+    /**
+     * 移除一个就绪任务
+     *
+     * @param topic 任务类型
+     * @param jobId 任务ID
+     */
     public static void remove(String topic, Long jobId) {
         DelayValidUtil.validateTopic(topic);
         DelayValidUtil.validateJobId(jobId);

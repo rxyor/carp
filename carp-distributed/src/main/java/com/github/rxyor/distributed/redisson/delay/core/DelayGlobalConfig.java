@@ -44,9 +44,15 @@ public class DelayGlobalConfig {
     @Setter
     private static String appName = "app_name";
 
+    /**
+     * 任务通数量
+     */
     @Getter
     private static Integer buckets = 4;
 
+    /**
+     * 扫描线程数
+     */
     @Getter
     private static int scanThreadNum = 4;
 
