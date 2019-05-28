@@ -15,8 +15,9 @@ public interface DelayJobHandler {
     /**
      * handle DelayJob
      * @param delayJob
+     * @return DelayResult
      */
-    void handleDelayJob(DelayJob delayJob);
+    DelayResult consume(DelayJob delayJob);
 
     /**
      * handler id

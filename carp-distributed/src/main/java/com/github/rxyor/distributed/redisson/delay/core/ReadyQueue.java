@@ -1,19 +1,20 @@
 package com.github.rxyor.distributed.redisson.delay.core;
 
 import com.github.rxyor.redis.redisson.util.RedissonUtil;
-import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RBlockingDeque;
 import org.redisson.api.RedissonClient;
 
 /**
  *<p>
- *
+ *实测当Queue 元素为空时 ，RBlockingDeque 并不会阻塞当前线程
  *</p>
  *
  * @author liuyang
  * @date 2019-05-24 Fri 17:19:00
  * @since 1.0.0
  */
+@Slf4j
 public class ReadyQueue {
 
     public static void offer(String topic, Long delayJobId) {
@@ -24,17 +25,30 @@ public class ReadyQueue {
         rBlockingDeque.offer(delayJobId);
     }
 
-    public static <T> DelayJob<T> pop(String topic) {
+    public static Long pop(String topic) {
         DelayValidUtil.validateTopic(topic);
         RedissonClient client = RedissonUtil.ifNullCreateRedissonClient();
         RBlockingDeque<Long> rBlockingDeque = client.getBlockingDeque(DelayGlobalConfig.gainBlockingQueueKey(topic));
-        Long jobId = rBlockingDeque.pop();
-        DelayJob<T> delayJob = null;
-        if (jobId != null) {
-            delayJob = DelayJobPool.get(jobId);
-            Optional.ofNullable(delayJob).ifPresent(tDelayJob -> DelayJobPool.delete(jobId));
+        return pop(rBlockingDeque);
+    }
+
+    public static void remove(String topic, Long jobId) {
+        DelayValidUtil.validateTopic(topic);
+        DelayValidUtil.validateJobId(jobId);
+        RedissonClient client = RedissonUtil.ifNullCreateRedissonClient();
+        RBlockingDeque<Long> rBlockingDeque = client.getBlockingDeque(DelayGlobalConfig.gainBlockingQueueKey(topic));
+        rBlockingDeque.remove(jobId);
+    }
+
+    private static <T> T pop(RBlockingDeque<T> deque) {
+        try {
+            if (deque != null) {
+                return deque.pop();
+            }
+        } catch (Exception e) {
+            log.error("pop from ready queue fail:{}", e);
         }
-        return delayJob;
+        return null;
     }
 
 }

@@ -1,11 +1,11 @@
 package com.github.rxyor.distributed.redisson.delay.core;
 
-import com.github.rxyor.common.util.SnowFlakeUtil;
 import com.github.rxyor.common.util.TimeUtil;
 import com.github.rxyor.redis.redisson.util.RedissonUtil;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import org.redisson.api.RScoredSortedSet;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.protocol.ScoredEntry;
@@ -21,44 +21,56 @@ import org.redisson.client.protocol.ScoredEntry;
  */
 public class DelayQueue {
 
-    public static <T> void offer(String topic, Long delaySeconds, T body) {
-        DelayValidUtil.validateTopic(topic);
-        DelayValidUtil.validateDelaySeconds(delaySeconds);
-        DelayJob<T> delayJob = new DelayJob<>(SnowFlakeUtil.nextId(), topic, TimeUtil.getCurrentSeconds(), 60 * 30L,
-            body);
+    public static <T> void offer(Long jobId, Long execTime) {
+        DelayValidUtil.validateJobId(jobId);
+        DelayValidUtil.validateDelaySeconds(execTime);
         RedissonClient redissonClient = RedissonUtil.ifNullCreateRedissonClient();
         RScoredSortedSet<DelayScoredItem> rScoredSortedSet = redissonClient
-            .getScoredSortedSet(DelayGlobalConfig.computeBucketKey(delayJob.getId()));
-        rScoredSortedSet.add(delayJob.getExecTime(), new DelayScoredItem(delayJob.getId(), delayJob.getExecTime()));
-        DelayJobPool.add(delayJob);
+            .getScoredSortedSet(DelayGlobalConfig.computeBucketKey(jobId));
+        rScoredSortedSet.add(execTime, new DelayScoredItem(jobId, execTime));
     }
 
-    public static List<DelayJob> pops() {
+    public static List<DelayScoredItem> popsNow(Integer bucketIndex) {
+        return popsByTime(bucketIndex, 0L, TimeUtil.getCurrentSeconds());
+    }
+
+    public static List<DelayScoredItem> popsByTime(Integer bucketIndex, Long startTimeSecond, Long endTimeSecond) {
+        List<DelayScoredItem> delayScoredItemList = new ArrayList<>(64);
         RedissonClient redissonClient = RedissonUtil.ifNullCreateRedissonClient();
-        List<DelayJob> delayJobList = new ArrayList<>();
-        List<DelayScoredItem> delayScoredItemList = new ArrayList<>();
-        for (int i = 0; i < DelayGlobalConfig.getBuckets(); i++) {
-            String bucketKey = DelayGlobalConfig.gainBucketKeyByIndex(i);
-            RScoredSortedSet<DelayScoredItem> rScoredSortedSet = redissonClient
-                .getScoredSortedSet(bucketKey);
-            Collection<ScoredEntry<DelayScoredItem>> scoredEntries = rScoredSortedSet
-                .entryRange(0d, true, TimeUtil.getCurrentSeconds(), true);
-            for (ScoredEntry<DelayScoredItem> entry : scoredEntries) {
-                if (entry.getValue() == null) {
-                    continue;
-                }
-                delayScoredItemList.add(entry.getValue());
-            }
-        }
-        for (DelayScoredItem item : delayScoredItemList) {
-            if (item.getId() == null) {
+        String bucketKey = DelayGlobalConfig.gainBucketKeyByIndex(bucketIndex);
+        RScoredSortedSet<DelayScoredItem> rScoredSortedSet = redissonClient
+            .getScoredSortedSet(bucketKey);
+        Collection<ScoredEntry<DelayScoredItem>> scoredEntries = rScoredSortedSet
+            .entryRange(startTimeSecond, true, endTimeSecond, true);
+        for (ScoredEntry<DelayScoredItem> entry : scoredEntries) {
+            if (entry.getValue() == null) {
                 continue;
             }
-            DelayJob delayJob = DelayJobPool.get(item.getId());
+            delayScoredItemList.add(entry.getValue());
+        }
+        if (!delayScoredItemList.isEmpty()) {
+            rScoredSortedSet.removeRangeByScore(startTimeSecond, true, endTimeSecond, true);
+        }
+        return delayScoredItemList;
+    }
+
+    public static void pushToReady() {
+        List<DelayScoredItem> allReadyItemList = new ArrayList<>(16);
+        for (int i = 0; i < DelayGlobalConfig.getBuckets(); i++) {
+            List<DelayScoredItem> items = popsNow(i);
+            allReadyItemList.addAll(items);
+        }
+        for (DelayScoredItem item : allReadyItemList) {
+            Long jobId = Optional.ofNullable(item).map(DelayScoredItem::getId).orElse(null);
+            if (jobId == null) {
+                continue;
+            }
+            DelayJob delayJob = DelayJobPool.get(jobId);
             if (delayJob != null) {
-                delayJobList.add(delayJob);
+                ReadyQueue.offer(delayJob.getTopic(), delayJob.getId());
             }
         }
-        return delayJobList;
     }
+
+
 }

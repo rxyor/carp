@@ -1,7 +1,7 @@
 package com.github.rxyor.distributed.redisson.delay.core;
 
-import com.github.rxyor.redis.redisson.util.RedissonUtil;
-import org.junit.Before;
+import com.github.rxyor.common.util.SnowFlakeUtil;
+import com.github.rxyor.common.util.TimeUtil;
 import org.junit.Test;
 
 /**
@@ -13,19 +13,13 @@ import org.junit.Test;
  * @date 2019-05-24 Fri 16:55:00
  * @since 1.0.0
  */
-public class DelayQueueTest {
-
-    @Before
-    public void config() {
-        RedissonUtil.configFromYaml(DelayQueue.class, "/redis.yml");
-    }
+public class DelayQueueTest extends BaseTest {
 
     @Test
     public void offer() {
         Girl girl = new Girl();
         girl.setAge(19);
         girl.setName("陈悠");
-
-        DelayQueue.<Girl>offer("Girl", 300L, girl);
+        DelayQueue.<Girl>offer(SnowFlakeUtil.nextId(), TimeUtil.getCurrentSeconds() + 300L);
     }
 }

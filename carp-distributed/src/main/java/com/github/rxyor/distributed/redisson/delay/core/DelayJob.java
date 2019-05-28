@@ -35,6 +35,11 @@ public class DelayJob<T> {
     private Long execTime;
 
     /**
+     * 重试次数
+     */
+    private Integer retryTimes = 0;
+
+    /**
      * 消费失败，重新消费间隔(单位秒)
      * 默认0L, 消费失败不重新消费
      */

@@ -31,6 +31,11 @@ public class DelayGlobalConfig {
     private static final String BLOCKING_QUEUE_NAME = "delay_blocking_queue";
 
     /**
+     * 执行失败的任务
+     */
+    private static final String FAIL_JOB_KEY = "fail_delay_job";
+
+    /**
      * 任务池(所有任务未处理任务详情)
      */
     private static final String DELAY_JOB_POOL = "delay_job_pool";
@@ -43,10 +48,7 @@ public class DelayGlobalConfig {
     private static Integer buckets = 4;
 
     @Getter
-    private static int scanThreadNum = 1;
-
-    @Getter
-    private static int processJobThreadNum = 2;
+    private static int scanThreadNum = 4;
 
     private static final String SPLITTER = ":";
 
@@ -97,6 +99,13 @@ public class DelayGlobalConfig {
      */
     public static String gainDelayJobPoolKey() {
         return appName + SPLITTER + DELAY_JOB_POOL;
+    }
+
+    /**
+     * 失败任务 redis key
+     */
+    public static String gainFailDelayJobKey() {
+        return appName + SPLITTER + FAIL_JOB_KEY;
     }
 
 }
