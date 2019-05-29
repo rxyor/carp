@@ -64,7 +64,6 @@ public class ReadyQueue {
                 return deque.pop();
             }
         } catch (Exception e) {
-            log.error("pop from ready queue fail:{}", e);
         }
         return null;
     }
