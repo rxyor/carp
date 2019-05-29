@@ -1,5 +1,6 @@
 package com.github.rxyor.distributed.redisson.delay.core;
 
+import com.github.rxyor.common.util.TimeUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -14,6 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LogDelayJobHandler extends AbstractDelayJobHandler {
 
+    public LogDelayJobHandler() {
+    }
+
     public LogDelayJobHandler(String topic) {
         super(topic);
     }
@@ -24,8 +28,8 @@ public class LogDelayJobHandler extends AbstractDelayJobHandler {
      */
     @Override
     public DelayResult handleDelayJob(DelayJob delayJob) {
-        System.out.println("process '" + this.topic + "' job:" + delayJob);
-        log.info("process '{}' job:{}", this.topic, delayJob);
+        System.out.println("now:" + TimeUtil.getCurrentSeconds() + ", process '" + this.topic + "' job:" + delayJob);
+        log.info("now:{}, process '{}' job:{}", TimeUtil.getCurrentSeconds(), this.topic, delayJob);
         return DelayResult.SUCCESS;
     }
 }

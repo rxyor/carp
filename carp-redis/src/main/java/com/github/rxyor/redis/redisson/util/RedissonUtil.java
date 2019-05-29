@@ -32,6 +32,12 @@ public class RedissonUtil {
         RedissonUtil.config = config;
     }
 
+    public static void setRedissonClient(RedissonClient redissonClient) {
+        Objects.requireNonNull(redissonClient, "redissonClient can't be null");
+        RedissonUtil.redissonClient = redissonClient;
+    }
+
+
     public static void configFromYaml(Class currentPackageClass, String resourcePath) {
         try {
             config = Config.fromYAML(FileUtil.readTextFromResource(currentPackageClass, resourcePath));

@@ -108,9 +108,12 @@ public class DelayScanner {
      */
     public synchronized void startup() {
         shutDown.set(false);
-        scan();
-        ThreadUtil.sleepSeconds(5L);
-        process();
+        POOL.submit(() -> {
+            scan();
+            ThreadUtil.sleepSeconds(5L);
+            process();
+        });
+
     }
 
     /**
@@ -151,7 +154,7 @@ public class DelayScanner {
      */
     private void processJobFromReadyQueue() {
         if (CollectionUtils.isEmpty(handlerList)) {
-            ThreadUtil.sleepSeconds(5 * 60L);
+            ThreadUtil.sleepSeconds(10 * 60L);
             return;
         }
         List<String> allTopics = computeAllTopic();
@@ -172,7 +175,7 @@ public class DelayScanner {
         }
         //所有Topic的Ready Queue都没发现任务时，挂起一会儿
         if (emptyTopicCount == allTopics.size()) {
-            ThreadUtil.sleepSeconds(30L);
+            ThreadUtil.sleepSeconds(1L);
         }
     }
 

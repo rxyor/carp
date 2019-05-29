@@ -21,11 +21,19 @@ import org.redisson.api.RedissonClient;
 public abstract class AbstractDelayJobHandler implements DelayJobHandler {
 
     @Getter
-    protected final String topic;
+    public String topic;
 
     private static SnowFlake snowFlake = new SnowFlake(5L, 1L);
 
+    public AbstractDelayJobHandler() {
+    }
+
     public AbstractDelayJobHandler(String topic) {
+        DelayValidUtil.validateTopic(topic);
+        this.topic = topic;
+    }
+
+    public void setTopic(String topic) {
         DelayValidUtil.validateTopic(topic);
         this.topic = topic;
     }
