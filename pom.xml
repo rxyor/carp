@@ -231,25 +231,32 @@
 
     <!--中心仓库配置-->
     <distributionManagement>
-        <repository>
-            <id>nexus-releases</id>
-            <name>Local Nexus Repository</name>
-            <url>https://repo.souche-inc.com/repository/releases/</url>
-        </repository>
         <snapshotRepository>
-            <id>nexus-snapshots</id>
-            <name>Local Nexus Repository</name>
-            <url>https://repo.souche-inc.com/repository/snapshots/</url>
+            <id>snapshot</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
-    </distributionManagement>
-    <repositories>
         <repository>
-            <id>souche</id>
-            <name>artifactory</name>
-            <url>https://repo.souche-inc.com/repository/public/</url>
-            <snapshots>
-                <updatePolicy>interval:2</updatePolicy>
-            </snapshots>
+            <id>release</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
-    </repositories>
+    </distributionManagement>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://github.com/rxyor/carp</url>
+        <connection>scm:git:https://github.com/rxyor/carp.git</connection>
+        <developerConnection>scm:git:https://github.com/rxyor/carp</developerConnection>
+    </scm>
+    <developers>
+        <developer>
+            <name>rxyor</name>
+            <email>rxyor@outlook.com</email>
+            <url>https://github.com/rxyor</url>
+        </developer>
+    </developers>
 </project>
