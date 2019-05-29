@@ -176,14 +176,14 @@
 
     <!--中心仓库配置-->
     <distributionManagement>
-        <repository>
+        <snapshotRepository>
             <id>snapshot</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </repository>
-        <snapshotRepository>
+        </snapshotRepository>
+        <repository>
             <id>release</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-        </snapshotRepository>
+        </repository>
     </distributionManagement>
     <licenses>
         <license>
@@ -194,8 +194,8 @@
     </licenses>
     <scm>
         <url>https://github.com/rxyor/carp</url>
-        <connection>https://github.com/rxyor/carp.git</connection>
-        <developerConnection>https://github.com/rxyor/carp</developerConnection>
+        <connection>scm:git:https://github.com/rxyor/carp.git</connection>
+        <developerConnection>scm:git:https://github.com/rxyor/carp</developerConnection>
     </scm>
     <developers>
         <developer>
