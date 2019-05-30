@@ -9,6 +9,8 @@
     <version>1.0.0</version>
     <packaging>pom</packaging>
     <name>carp</name>
+    <description>carp is project which contains common utils ,redis delay job , distributed lock and so on!</description>
+    <url>https://github.com/rxyor/carp</url>
 
     <!--模块-->
     <modules>
