@@ -15,7 +15,6 @@
         <module>carp-redis</module>
         <module>carp-distributed</module>
         <module>carp-common</module>
-        <module>carp-mvc-web</module>
     </modules>
 
     <!--属性配置-->
