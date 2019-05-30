@@ -6,11 +6,12 @@ import com.github.rxyor.distributed.redisson.delay.core.DelayScanner;
 import com.github.rxyor.redis.redisson.codec.FastJsonCodec;
 import com.github.rxyor.redis.redisson.util.RedissonUtil;
 import java.util.List;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
-import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
+import org.redisson.config.SingleServerConfig;
 
 /**
  *<p>
@@ -25,15 +26,14 @@ public class DelayConfig {
 
     @Getter
     @Setter
+    private RedisConnConfig redisConnConfig;
+
+    @Getter
+    @Setter
     private String appName;
 
     @Getter
-    @Setter
     private Config redissonConfig;
-
-    @Getter
-    @Setter
-    private RedissonClient redissonClient;
 
     @Getter
     @Setter
@@ -43,12 +43,24 @@ public class DelayConfig {
 
 
     public void init() {
-        Config config = new Config(redissonClient.getConfig());
+        Objects.requireNonNull(redisConnConfig, "redisConnConfig cant't be null");
+        int database = redisConnConfig.getDatabase() == null ? 0 : redisConnConfig.getDatabase();
+
+        Config config = new Config();
         config.setCodec(new FastJsonCodec());
+        SingleServerConfig singleServerConfig = config.useSingleServer();
+        singleServerConfig.setAddress(redisConnConfig.address());
+        singleServerConfig.setDatabase(database);
+        if (StringUtils.isNotEmpty(redisConnConfig.getPassword())) {
+            singleServerConfig.setPassword(redisConnConfig.getPassword());
+        }
+        redissonConfig = config;
+
         RedissonUtil.setConfig(config);
         if (StringUtils.isNotEmpty(this.appName)) {
             DelayGlobalConfig.setAppName(this.appName);
         }
+
         if (delayScanner == null) {
             delayScanner = new DelayScanner();
         }

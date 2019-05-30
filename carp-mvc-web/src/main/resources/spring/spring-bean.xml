@@ -4,19 +4,19 @@
     xmlns:redisson="http://redisson.org/schema/redisson"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://redisson.org/schema/redisson http://redisson.org/schema/redisson/redisson.xsd">
 
-    <redisson:client id="redissonClient">
-        <redisson:single-server
-            address="redis://127.0.0.1:6379"
-            database="0"
-        />
-    </redisson:client>
+
+    <bean id="redisConnConfig"
+        class="com.github.rxyor.distributed.redisson.delay.spring.config.RedisConnConfig">
+        <property name="host" value="127.0.0.1"/>
+        <property name="password" value=""/>
+    </bean>
 
 
     <bean id="redisDelayJobConfig"
         class="com.github.rxyor.distributed.redisson.delay.spring.config.DelayConfig"
         init-method="init" destroy-method="destroy">
         <property name="appName" value="carp-web"/>
-        <property name="redissonClient" ref="redissonClient"/>
+        <property name="redisConnConfig" ref="redisConnConfig"/>
         <property name="handlerList">
             <list>
                 <bean class="com.github.rxyor.distributed.redisson.delay.core.LogDelayJobHandler">
