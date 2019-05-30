@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-mvn clean deploy -Dmaven.test.skip=true -Darguments=gpg.passphrase=""
+mvn clean deploy -P release -Dmaven.test.skip=true -Darguments=gpg.passphrase=""
