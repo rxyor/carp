@@ -36,6 +36,7 @@
         <maven-war-plugin.version>3.2.0</maven-war-plugin.version>
         <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
         <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
+        <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <!--modules-->
         <carp-redis.version>1.0.0</carp-redis.version>
         <carp-common.version>1.0.0</carp-common.version>
@@ -332,7 +333,6 @@
             </distributionManagement>
             <build>
                 <plugins>
-                    <!-- Source -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
@@ -353,11 +353,10 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <!-- Gpg Signature -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
+                        <version>${maven-gpg-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>release</id>
