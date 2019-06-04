@@ -14,14 +14,14 @@ import org.apache.commons.lang3.StringUtils;
 public class DelayValidUtil {
 
     public static void validateTopic(String topic) {
-        if (StringUtils.isEmpty(topic)) {
-            throw new IllegalArgumentException("topic can't be empty");
+        if (StringUtils.isBlank(topic)) {
+            throw new IllegalArgumentException("topic can't be blank");
         }
     }
 
     public static void validateHandlerId(String handlerId) {
-        if (StringUtils.isEmpty(handlerId)) {
-            throw new IllegalArgumentException("handler's id can't be empty");
+        if (StringUtils.isBlank(handlerId)) {
+            throw new IllegalArgumentException("handler's id can't be blank");
         }
     }
 
@@ -31,9 +31,21 @@ public class DelayValidUtil {
         }
     }
 
+    public static void validateJobId(String delayJobId) {
+        if (StringUtils.isBlank(delayJobId)) {
+            throw new IllegalArgumentException("delayJobId can't be blank");
+        }
+    }
+
     public static void validateDelaySeconds(Long delaySeconds) {
         if (delaySeconds == null || delaySeconds < 0L) {
             throw new IllegalArgumentException("delaySeconds must >= 0");
+        }
+    }
+
+    public static void validateExecTime(Long execTime) {
+        if (execTime == null || execTime < 0L) {
+            throw new IllegalArgumentException("execTime must >= 0");
         }
     }
 

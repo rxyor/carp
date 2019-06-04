@@ -1,5 +1,8 @@
-package com.github.rxyor.distributed.redisson.delay.core;
+package com.github.rxyor.distributed.redisson.delay.handler;
 
+
+import com.github.rxyor.distributed.redisson.delay.core.DelayJob;
+import com.github.rxyor.distributed.redisson.delay.core.DelayResult;
 
 /**
  *<p>
@@ -10,7 +13,7 @@ package com.github.rxyor.distributed.redisson.delay.core;
  * @date 2019-05-21 Tue 13:56:00
  * @since 1.0.0
  */
-public interface DelayJobHandler {
+public interface JobHandler {
 
     /**
      * handle DelayJob

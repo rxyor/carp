@@ -54,7 +54,7 @@ public class FileUtil {
     public static File readFile(String path) {
         Objects.requireNonNull(path, "path can't be null");
         File file = new File(path);
-        if (file.exists()) {
+        if (!file.exists()) {
             throw new FileNotExistException(path + " not exists");
         }
         return file;

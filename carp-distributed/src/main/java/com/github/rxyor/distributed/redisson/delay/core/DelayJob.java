@@ -22,7 +22,7 @@ public class DelayJob<T> {
     /**
      * job id
      */
-    private Long id;
+    private String id;
 
     /**
      * 消息类型

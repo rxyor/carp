@@ -1,12 +1,13 @@
-package com.github.rxyor.distributed.redisson.delay.core;
+package com.github.rxyor.distributed.redisson.delay.handler;
 
-import com.github.rxyor.common.util.SnowFlake;
-import com.github.rxyor.redis.redisson.util.RedissonUtil;
-import java.util.concurrent.TimeUnit;
+import com.github.rxyor.common.util.RandomUtil;
+import com.github.rxyor.distributed.redisson.delay.core.DelayJob;
+import com.github.rxyor.distributed.redisson.delay.core.DelayResult;
+import com.github.rxyor.distributed.redisson.delay.core.DelayValidUtil;
+import com.github.rxyor.distributed.redisson.delay.core.DelayClientProxy;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RSet;
-import org.redisson.api.RedissonClient;
 
 /**
  *<p>
@@ -18,24 +19,32 @@ import org.redisson.api.RedissonClient;
  * @since 1.0.0
  */
 @Slf4j
-public abstract class AbstractDelayJobHandler implements DelayJobHandler {
+public abstract class AbstractJobHandler implements JobHandler {
 
     @Getter
     public String topic;
 
-    private static SnowFlake snowFlake = new SnowFlake(5L, 1L);
+    @Getter
+    public DelayClientProxy delayClientProxy;
 
-    public AbstractDelayJobHandler() {
+    public AbstractJobHandler() {
     }
 
-    public AbstractDelayJobHandler(String topic) {
+    public AbstractJobHandler(String topic, DelayClientProxy delayClientProxy) {
+        Objects.requireNonNull(delayClientProxy, "delayClientProxy can't be null");
         DelayValidUtil.validateTopic(topic);
         this.topic = topic;
+        this.delayClientProxy = delayClientProxy;
     }
 
     public void setTopic(String topic) {
         DelayValidUtil.validateTopic(topic);
         this.topic = topic;
+    }
+
+    public void setDelayClientProxy(DelayClientProxy delayClientProxy) {
+        Objects.requireNonNull(delayClientProxy, "delayClientProxy can't be null");
+        this.delayClientProxy = delayClientProxy;
     }
 
     /**
@@ -99,7 +108,7 @@ public abstract class AbstractDelayJobHandler implements DelayJobHandler {
             || delayJob.getRetryTimes() <= 0) {
             return;
         }
-        DelayBucket.offer(delayJob.getTopic(), delayJob.getRetryDelay(),
+        delayClientProxy.offer(delayJob.getTopic(), delayJob.getRetryDelay(),
             delayJob.getRetryTimes() - 1, delayJob.getRetryDelay(), delayJob.getBody());
     }
 
@@ -112,11 +121,7 @@ public abstract class AbstractDelayJobHandler implements DelayJobHandler {
         if (delayJob == null || delayJob.getId() == null) {
             return;
         }
-        RedissonClient client = RedissonUtil.ifNullCreateRedissonClient();
-        String key = DelayGlobalConfig.gainFailDelayJobKey() + ":" + delayJob.getId();
-        RSet<DelayJob> rSet = client.getSet(key);
-        rSet.addAsync(delayJob);
-        rSet.expireAsync(30L, TimeUnit.DAYS);
+        delayClientProxy.recordFail(delayJob);
     }
 
     /**
@@ -126,6 +131,6 @@ public abstract class AbstractDelayJobHandler implements DelayJobHandler {
      */
     @Override
     public String getId() {
-        return snowFlake.nextHexId();
+        return RandomUtil.shortUuid();
     }
 }

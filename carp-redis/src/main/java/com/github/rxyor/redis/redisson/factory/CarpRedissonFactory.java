@@ -1,9 +1,11 @@
 package com.github.rxyor.redis.redisson.factory;
 
 import com.github.rxyor.common.core.exception.ReadFileException;
+import com.github.rxyor.common.util.FileUtil;
 import com.github.rxyor.redis.redisson.config.RedisDataSource;
 import com.github.rxyor.redis.redisson.exception.RedissonLackConfigExecption;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 import lombok.Getter;
 import org.redisson.Redisson;
@@ -70,19 +72,27 @@ public class CarpRedissonFactory {
 
     private Config buildYamlConfig() {
         Objects.requireNonNull(this.yaml, "yaml can't be null");
+        InputStream is = null;
         try {
-            return Config.fromYAML(this.yaml);
+            is = FileUtil.readInputStream(this.yaml);
+            return Config.fromYAML(is);
         } catch (IOException e) {
             throw new ReadFileException(e);
+        }finally {
+            FileUtil.close(is);
         }
     }
 
     private Config buildJsonConfig() {
         Objects.requireNonNull(this.json, "json can't be null");
+        InputStream is = null;
         try {
-            return Config.fromJSON(this.json);
+            is = FileUtil.readInputStream(this.json);
+            return Config.fromJSON(is);
         } catch (IOException e) {
             throw new ReadFileException(e);
+        }finally {
+            FileUtil.close(is);
         }
     }
 

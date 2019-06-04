@@ -1,6 +1,9 @@
-package com.github.rxyor.distributed.redisson.delay.core;
+package com.github.rxyor.distributed.redisson.delay.handler;
 
 import com.github.rxyor.common.util.TimeUtil;
+import com.github.rxyor.distributed.redisson.delay.core.DelayJob;
+import com.github.rxyor.distributed.redisson.delay.core.DelayResult;
+import com.github.rxyor.distributed.redisson.delay.core.DelayClientProxy;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -13,13 +16,14 @@ import lombok.extern.slf4j.Slf4j;
  * @since 1.0.0
  */
 @Slf4j
-public class LogDelayJobHandler extends AbstractDelayJobHandler {
+public class LogJobHandler extends AbstractJobHandler {
 
-    public LogDelayJobHandler() {
+    public LogJobHandler() {
     }
 
-    public LogDelayJobHandler(String topic) {
-        super(topic);
+    public LogJobHandler(String topic,
+        DelayClientProxy delayClientProxy) {
+        super(topic, delayClientProxy);
     }
 
     /**

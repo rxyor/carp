@@ -15,17 +15,17 @@ import lombok.Data;
  */
 @AllArgsConstructor
 @Data
-public class DelayScoredItem implements Serializable {
+public class ScoreItem implements Serializable {
 
-    private static final long serialVersionUID = 4610441507839465768L;
+    private static final long serialVersionUID = 3284584517578270550L;
 
-    public DelayScoredItem() {
+    public ScoreItem() {
     }
 
     /**
      * job id
      */
-    private Long id;
+    private String id;
 
     /**
      * 时间戳(精确到秒)
