@@ -1,0 +1,7 @@
+singleServerConfig:
+  address: "redis://127.0.0.1:6379"
+  password: null
+
+threads: 0
+nettyThreads: 0
+codec: !<com.github.rxyor.redis.redisson.codec.FastJsonCodec> {}
