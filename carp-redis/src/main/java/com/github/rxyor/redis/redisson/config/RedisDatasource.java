@@ -12,7 +12,7 @@ import lombok.Data;
  * @since 1.0.0
  */
 @Data
-public class RedisDataSource {
+public class RedisDatasource {
 
     private String host;
 

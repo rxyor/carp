@@ -2,7 +2,7 @@ package com.github.rxyor.redis.redisson.factory;
 
 import com.github.rxyor.common.core.exception.ReadFileException;
 import com.github.rxyor.common.util.FileUtil;
-import com.github.rxyor.redis.redisson.config.RedisDataSource;
+import com.github.rxyor.redis.redisson.config.RedisDatasource;
 import com.github.rxyor.redis.redisson.exception.RedissonLackConfigExecption;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +28,7 @@ public class CarpRedissonFactory {
     private Config config;
 
     @Getter
-    private RedisDataSource dataSource;
+    private RedisDatasource dataSource;
 
     @Getter
     private String yaml;
@@ -36,7 +36,7 @@ public class CarpRedissonFactory {
     @Getter
     private String json;
 
-    private CarpRedissonFactory(Config config, RedisDataSource dataSource, String yaml, String json) {
+    private CarpRedissonFactory(Config config, RedisDatasource dataSource, String yaml, String json) {
         this.config = config;
         this.dataSource = dataSource;
         this.yaml = yaml;
@@ -110,7 +110,7 @@ public class CarpRedissonFactory {
 
         private Config config;
 
-        private RedisDataSource dataSource;
+        private RedisDatasource dataSource;
 
         private String yaml;
 
@@ -122,9 +122,9 @@ public class CarpRedissonFactory {
             return this;
         }
 
-        public Builder dataSource(RedisDataSource redisDataSource) {
-            Objects.requireNonNull(redisDataSource, "redisDataSource can't be null");
-            this.dataSource = redisDataSource;
+        public Builder dataSource(RedisDatasource redisDatasource) {
+            Objects.requireNonNull(redisDatasource, "redisDatasource can't be null");
+            this.dataSource = redisDatasource;
             return this;
         }
 
