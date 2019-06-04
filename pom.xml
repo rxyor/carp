@@ -19,6 +19,7 @@
         <module>carp-redis</module>
         <module>carp-distributed</module>
         <module>carp-common</module>
+        <module>carp-example</module>
     </modules>
 
     <!--属性配置-->
@@ -180,6 +181,11 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-webmvc</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
                 <version>${spring.version}</version>
             </dependency>
 
