@@ -1,6 +1,6 @@
 package com.github.rxyor.spring.extend.redis.xsd;
 
-import com.github.rxyor.redis.redisson.config.RedisDatasource;
+import com.github.rxyor.redis.redisson.config.RedisConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
@@ -19,7 +19,7 @@ public class RedisDatasourceDefinitionParser extends AbstractSingleBeanDefinitio
 
     @Override
     protected Class<?> getBeanClass(Element element) {
-        return RedisDatasource.class;
+        return RedisConfig.class;
     }
 
     @Override

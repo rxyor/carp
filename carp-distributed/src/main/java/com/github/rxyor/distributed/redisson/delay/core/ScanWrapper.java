@@ -2,7 +2,7 @@ package com.github.rxyor.distributed.redisson.delay.core;
 
 import com.github.rxyor.distributed.redisson.delay.config.DelayConfig;
 import com.github.rxyor.distributed.redisson.delay.handler.JobHandler;
-import com.github.rxyor.redis.redisson.config.RedisDatasource;
+import com.github.rxyor.redis.redisson.config.RedisConfig;
 import com.github.rxyor.redis.redisson.factory.CarpRedissonFactory;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +24,7 @@ public class ScanWrapper {
 
     @Getter
     @Setter
-    private RedisDatasource redisDatasource;
+    private RedisConfig redisConfig;
 
     @Getter
     @Setter
@@ -50,15 +50,15 @@ public class ScanWrapper {
     }
 
     public void init() {
-        Optional.ofNullable(redisDatasource)
-            .orElseThrow(() -> new IllegalArgumentException("redisDatasource can't be null"));
+        Optional.ofNullable(redisConfig)
+            .orElseThrow(() -> new IllegalArgumentException("redisConfig can't be null"));
         if (handlerList == null || handlerList.size() == 0) {
             throw new IllegalArgumentException("scanWrapper must have one handler at least");
         }
         if (delayConfig == null) {
             delayConfig = new DelayConfig();
         }
-        CarpRedissonFactory factory = CarpRedissonFactory.builder().dataSource(redisDatasource).build();
+        CarpRedissonFactory factory = CarpRedissonFactory.builder().redisConfig(redisConfig).build();
         redissonClient = factory.createRedissonClient();
         delayClientProxy = new DelayClientProxy(redissonClient, delayConfig);
 

@@ -1,9 +1,9 @@
 package com.github.rxyor.spring.extend.distributed.delay.config;
 
 import com.github.rxyor.distributed.redisson.delay.core.ScanWrapper;
-import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 
 /**
  *<p>
@@ -14,16 +14,22 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
  * @date 2019-06-05 Wed 11:10:00
  * @since 1.0.0
  */
-public class DelayScannerBeanPostProcessor implements BeanPostProcessor {
+public class DelayScannerBeanPostProcessor implements InitializingBean, DisposableBean {
 
     @Autowired(required = false)
     private ScanWrapper scanWrapper;
 
     @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+    public void destroy() throws Exception {
+        if (scanWrapper != null && scanWrapper.getScanner() != null) {
+            scanWrapper.getScanner().shutDown();
+        }
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
         if (scanWrapper != null) {
             scanWrapper.doScan();
         }
-        return null;
     }
 }

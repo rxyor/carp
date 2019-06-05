@@ -1,6 +1,6 @@
 package com.github.rxyor.spring.extend.redis.xsd;
 
-import com.github.rxyor.redis.redisson.config.RedisDatasource;
+import com.github.rxyor.redis.redisson.config.RedisConfig;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -19,7 +19,7 @@ public class AppTest {
     @Test
     public void testRedisDatasourceXsd() {
         ApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
-        RedisDatasource redisDatasource = (RedisDatasource) context.getBean("redisDatasource");
-        System.out.println(redisDatasource);
+        RedisConfig redisConfig = (RedisConfig) context.getBean("redisConfig");
+        System.out.println(redisConfig);
     }
 }

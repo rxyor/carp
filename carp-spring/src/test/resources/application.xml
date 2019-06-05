@@ -4,8 +4,8 @@
     xmlns:carp-redis="http://github.com/schema/carp-redis"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://github.com/schema/carp-redis http://github.com/schema/carp-redis.xsd">
 
-    <carp-redis:datasource
-        id="redisDatasource"
+    <carp-redis:redisConfig
+        id="redisConfig"
         database="0"
         host="127.0.0.1"
         port="6379"

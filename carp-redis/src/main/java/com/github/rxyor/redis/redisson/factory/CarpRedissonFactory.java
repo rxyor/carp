@@ -2,14 +2,17 @@ package com.github.rxyor.redis.redisson.factory;
 
 import com.github.rxyor.common.core.exception.ReadFileException;
 import com.github.rxyor.common.util.FileUtil;
-import com.github.rxyor.redis.redisson.config.RedisDatasource;
+import com.github.rxyor.redis.redisson.codec.FastJsonCodec;
+import com.github.rxyor.redis.redisson.config.RedisConfig;
 import com.github.rxyor.redis.redisson.exception.RedissonLackConfigExecption;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
+import java.util.Optional;
 import lombok.Getter;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
+import org.redisson.client.codec.Codec;
 import org.redisson.config.Config;
 import org.redisson.config.SingleServerConfig;
 
@@ -28,7 +31,7 @@ public class CarpRedissonFactory {
     private Config config;
 
     @Getter
-    private RedisDatasource dataSource;
+    private RedisConfig redisConfig;
 
     @Getter
     private String yaml;
@@ -36,9 +39,9 @@ public class CarpRedissonFactory {
     @Getter
     private String json;
 
-    private CarpRedissonFactory(Config config, RedisDatasource dataSource, String yaml, String json) {
+    private CarpRedissonFactory(Config config, RedisConfig redisConfig, String yaml, String json) {
         this.config = config;
-        this.dataSource = dataSource;
+        this.redisConfig = redisConfig;
         this.yaml = yaml;
         this.json = json;
     }
@@ -51,8 +54,8 @@ public class CarpRedissonFactory {
         if (config != null) {
             return config;
         }
-        if (dataSource != null) {
-            return buildDataSourceConfig();
+        if (redisConfig != null) {
+            return buildRedisBeanConfig();
         }
         if (yaml != null) {
             return buildYamlConfig();
@@ -63,10 +66,12 @@ public class CarpRedissonFactory {
         throw new RedissonLackConfigExecption("you must config redis for factory");
     }
 
-    private Config buildDataSourceConfig() {
+    private Config buildRedisBeanConfig() {
         Config config = new Config();
         SingleServerConfig singleServerConfig = config.useSingleServer();
-        singleServerConfig.setAddress(this.buildAddress(dataSource.getHost(), dataSource.getPort()));
+        singleServerConfig.setAddress(this.buildAddress(redisConfig.getHost(), redisConfig.getPort()));
+        Codec codec = Optional.ofNullable(redisConfig).map(RedisConfig::getCodec).orElse(new FastJsonCodec());
+        config.setCodec(codec);
         return config;
     }
 
@@ -75,10 +80,11 @@ public class CarpRedissonFactory {
         InputStream is = null;
         try {
             is = FileUtil.readInputStream(this.yaml);
-            return Config.fromYAML(is);
+            Config config = Config.fromYAML(is);
+            return configCodec(config);
         } catch (IOException e) {
             throw new ReadFileException(e);
-        }finally {
+        } finally {
             FileUtil.close(is);
         }
     }
@@ -88,12 +94,21 @@ public class CarpRedissonFactory {
         InputStream is = null;
         try {
             is = FileUtil.readInputStream(this.json);
-            return Config.fromJSON(is);
+            Config config = Config.fromJSON(is);
+            return configCodec(config);
         } catch (IOException e) {
             throw new ReadFileException(e);
-        }finally {
+        } finally {
             FileUtil.close(is);
         }
+    }
+
+    private Config configCodec(Config config) {
+        if (config == null || config.getCodec() != null) {
+            return config;
+        }
+        config.setCodec(new FastJsonCodec());
+        return config;
     }
 
     private String buildAddress(String host, Integer port) {
@@ -110,7 +125,7 @@ public class CarpRedissonFactory {
 
         private Config config;
 
-        private RedisDatasource dataSource;
+        private RedisConfig redisConfig;
 
         private String yaml;
 
@@ -122,9 +137,9 @@ public class CarpRedissonFactory {
             return this;
         }
 
-        public Builder dataSource(RedisDatasource redisDatasource) {
-            Objects.requireNonNull(redisDatasource, "redisDatasource can't be null");
-            this.dataSource = redisDatasource;
+        public Builder redisConfig(RedisConfig redisConfig) {
+            Objects.requireNonNull(redisConfig, "redisConfig can't be null");
+            this.redisConfig = redisConfig;
             return this;
         }
 
@@ -141,7 +156,7 @@ public class CarpRedissonFactory {
         }
 
         public CarpRedissonFactory build() {
-            return new CarpRedissonFactory(config, dataSource, yaml, json);
+            return new CarpRedissonFactory(config, redisConfig, yaml, json);
         }
     }
 }

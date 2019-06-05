@@ -9,14 +9,14 @@
 
     <xsd:import namespace="http://www.springframework.org/schema/beans"/>
 
-    <xsd:element name="datasource">
+    <xsd:element name="redisConfig">
         <xsd:complexType>
             <xsd:complexContent>
                 <xsd:extension base="beans:identifiedType">
                     <xsd:attribute name="host" type="xsd:string" use="optional"
                         default="127.0.0.1"/>
-                    <xsd:attribute name="port" type="xsd:integer" use="optional" default="6379"/>
-                    <xsd:attribute name="database" type="xsd:integer" use="optional" default="0"/>
+                    <xsd:attribute name="port" type="xsd:string" use="optional" default="6379"/>
+                    <xsd:attribute name="database" type="xsd:string" use="optional" default="0"/>
                     <xsd:attribute name="password" type="xsd:string"/>
                 </xsd:extension>
             </xsd:complexContent>

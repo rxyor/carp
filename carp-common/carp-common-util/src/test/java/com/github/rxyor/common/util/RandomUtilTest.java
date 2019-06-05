@@ -1,7 +1,5 @@
 package com.github.rxyor.common.util;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 /**

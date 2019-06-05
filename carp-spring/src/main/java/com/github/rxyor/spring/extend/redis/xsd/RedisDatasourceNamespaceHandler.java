@@ -15,6 +15,6 @@ public class RedisDatasourceNamespaceHandler extends NamespaceHandlerSupport {
 
     @Override
     public void init() {
-        registerBeanDefinitionParser("datasource", new RedisDatasourceDefinitionParser());
+        registerBeanDefinitionParser("redisConfig", new RedisDatasourceDefinitionParser());
     }
 }

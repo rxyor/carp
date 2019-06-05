@@ -1,6 +1,7 @@
 package com.github.rxyor.redis.redisson.config;
 
 import lombok.Data;
+import org.redisson.client.codec.Codec;
 
 /**
  *<p>
@@ -12,7 +13,7 @@ import lombok.Data;
  * @since 1.0.0
  */
 @Data
-public class RedisDatasource {
+public class RedisConfig {
 
     private String host;
 
@@ -21,5 +22,7 @@ public class RedisDatasource {
     private String password;
 
     private Integer database;
+
+    private Codec codec;
 
 }
