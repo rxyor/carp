@@ -1,6 +1,7 @@
 package com.github.rxyor.distributed.redisson.delay.handler;
 
 
+import com.github.rxyor.distributed.redisson.delay.core.DelayClientProxy;
 import com.github.rxyor.distributed.redisson.delay.core.DelayJob;
 import com.github.rxyor.distributed.redisson.delay.core.DelayResult;
 
@@ -35,4 +36,16 @@ public interface JobHandler {
      * @return topic
      */
     String getTopic();
+
+    /**
+     * 延时任务操作客户端对象
+     * @return
+     */
+    DelayClientProxy getDelayClientProxy();
+
+    /**
+     * 延时任务操作客户端对象
+     * @return
+     */
+    void setDelayClientProxy(DelayClientProxy delayClientProxy);
 }

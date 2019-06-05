@@ -42,6 +42,7 @@ public abstract class AbstractJobHandler implements JobHandler {
         this.topic = topic;
     }
 
+    @Override
     public void setDelayClientProxy(DelayClientProxy delayClientProxy) {
         Objects.requireNonNull(delayClientProxy, "delayClientProxy can't be null");
         this.delayClientProxy = delayClientProxy;

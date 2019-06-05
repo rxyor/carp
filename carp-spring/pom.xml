@@ -23,6 +23,12 @@
             <version>${carp-redis.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.rxyor</groupId>
+            <artifactId>carp-distributed</artifactId>
+            <version>${carp-distributed.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
