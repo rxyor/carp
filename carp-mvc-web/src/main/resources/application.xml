@@ -8,10 +8,11 @@
 
     <bean id="propertyConfigurer"
         class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location">
-            <value>classpath:properties/spring-redis.properties</value>
+        <property name="locations">
+            <list>
+                <value>classpath*:properties/spring-redis.properties</value>
+            </list>
         </property>
-        <property name="fileEncoding" value="utf-8"/>
     </bean>
 
     <import resource="classpath*:spring/spring-*.xml"/>

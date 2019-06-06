@@ -2,13 +2,27 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:carp-redis="http://github.com/schema/carp-redis"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://github.com/schema/carp-redis http://github.com/schema/carp-redis.xsd">
+    xmlns:redisson="http://redisson.org/schema/redisson"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://github.com/schema/carp-redis http://github.com/schema/carp-redis.xsd http://redisson.org/schema/redisson http://redisson.org/schema/redisson/redisson.xsd">
+
+    <bean id="propertyConfigurer"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath*:properties/spring-redis.properties</value>
+            </list>
+        </property>
+    </bean>
 
     <carp-redis:redisConfig
         id="redisConfig"
         database="0"
-        host="127.0.0.1"
-        port="6379"
-        password=""
+        host="${redis.host}"
+        port="${redis.port}"
+        password="${redis.password}"
     />
+
+    <bean class="com.github.rxyor.distributed.redisson.delay.config.DelayConfig">
+        <property name="appName" value="${redis.host}"/>
+    </bean>
 </beans>

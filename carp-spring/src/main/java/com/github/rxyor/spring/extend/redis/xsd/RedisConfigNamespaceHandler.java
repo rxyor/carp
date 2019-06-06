@@ -11,10 +11,10 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
  * @date 2019-06-03 Mon 14:45:00
  * @since 1.0.0
  */
-public class RedisDatasourceNamespaceHandler extends NamespaceHandlerSupport {
+public class RedisConfigNamespaceHandler extends NamespaceHandlerSupport {
 
     @Override
     public void init() {
-        registerBeanDefinitionParser("redisConfig", new RedisDatasourceDefinitionParser());
+        registerBeanDefinitionParser("redisConfig", new RedisConfigDefinitionParser());
     }
 }

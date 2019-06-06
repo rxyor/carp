@@ -64,6 +64,7 @@
         <spring.version>5.1.7.RELEASE</spring.version>
         <servlet.api.version>4.0.0</servlet.api.version>
         <jstl.version>1.2</jstl.version>
+        <netty-all.version>4.1.36.Final</netty-all.version>
     </properties>
 
     <!--依赖管理-->
@@ -203,6 +204,11 @@
                 <groupId>javax.servlet</groupId>
                 <artifactId>jstl</artifactId>
                 <version>${jstl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${netty-all.version}</version>
             </dependency>
 
         </dependencies>

@@ -43,13 +43,16 @@ public class ScanWrapper {
     @Getter
     private Scanner scanner;
 
-    public void doScan() {
-        init();
+    public void initAndScan() {
+        prepare();
         scanner.startup();
-
     }
 
-    public void init() {
+    public void destroy() {
+        scanner.shutDown();
+    }
+
+    public void prepare() {
         Optional.ofNullable(redisConfig)
             .orElseThrow(() -> new IllegalArgumentException("redisConfig can't be null"));
         if (handlerList == null || handlerList.size() == 0) {

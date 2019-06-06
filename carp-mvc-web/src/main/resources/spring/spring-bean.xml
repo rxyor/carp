@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:carp-redis="http://github.com/schema/carp-redis"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://github.com/schema/carp-redis http://github.com/schema/carp-redis.xsd">
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-
-    <!--    <carp-redis:redisConfig-->
-    <!--        id="redisConfig"-->
-    <!--        host="${redis.host}"-->
-    <!--        port="${redis.port}"-->
-    <!--        password="${redis.password}"-->
-    <!--        database="${redis.database}"/>-->
-    <carp-redis:redisConfig id="redisConfig"/>
+    <bean id="redisConfig" class="com.github.rxyor.redis.redisson.config.RedisConfig">
+        <property name="host" value="${redis.host}"/>
+        <property name="port" value="${redis.port}"/>
+        <property name="password" value="${redis.password}"/>
+        <property name="database" value="${redis.database}"/>
+    </bean>
 
     <bean id="delayConfig" class="com.github.rxyor.distributed.redisson.delay.config.DelayConfig">
         <property name="appName" value="carp"/>
     </bean>
 
-    <bean id="scanWrapper" class="com.github.rxyor.distributed.redisson.delay.core.ScanWrapper">
+    <bean id="scanWrapper" class="com.github.rxyor.distributed.redisson.delay.core.ScanWrapper"
+        init-method="initAndScan" destroy-method="destroy">
         <property name="redisConfig" ref="redisConfig"/>
         <property name="delayConfig" ref="delayConfig"/>
         <property name="handlerList">
@@ -28,7 +26,4 @@
             </list>
         </property>
     </bean>
-
-
-    <bean id="fastJsonCodec" class="com.github.rxyor.redis.redisson.codec.FastJsonCodec"/>
 </beans>

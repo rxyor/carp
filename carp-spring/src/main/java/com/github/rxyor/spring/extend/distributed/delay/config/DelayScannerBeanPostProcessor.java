@@ -29,7 +29,7 @@ public class DelayScannerBeanPostProcessor implements InitializingBean, Disposab
     @Override
     public void afterPropertiesSet() throws Exception {
         if (scanWrapper != null) {
-            scanWrapper.doScan();
+            scanWrapper.initAndScan();
         }
     }
 }
