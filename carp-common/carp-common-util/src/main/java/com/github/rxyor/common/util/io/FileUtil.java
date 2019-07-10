@@ -1,4 +1,4 @@
-package com.github.rxyor.common.util;
+package com.github.rxyor.common.util.io;
 
 import com.github.rxyor.common.core.exception.CarpIOException;
 import com.github.rxyor.common.core.exception.FileNotExistException;

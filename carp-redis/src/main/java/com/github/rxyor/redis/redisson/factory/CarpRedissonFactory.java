@@ -1,7 +1,7 @@
 package com.github.rxyor.redis.redisson.factory;
 
 import com.github.rxyor.common.core.exception.ReadFileException;
-import com.github.rxyor.common.util.FileUtil;
+import com.github.rxyor.common.util.io.FileUtil;
 import com.github.rxyor.redis.redisson.codec.FastJsonCodec;
 import com.github.rxyor.redis.redisson.config.RedisConfig;
 import com.github.rxyor.redis.redisson.exception.RedissonLackConfigExecption;

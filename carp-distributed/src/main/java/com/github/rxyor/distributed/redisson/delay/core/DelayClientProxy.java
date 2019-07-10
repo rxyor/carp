@@ -1,7 +1,7 @@
 package com.github.rxyor.distributed.redisson.delay.core;
 
-import com.github.rxyor.common.util.RandomUtil;
-import com.github.rxyor.common.util.TimeUtil;
+import com.github.rxyor.common.util.common.RandomUtil;
+import com.github.rxyor.common.util.date.TimeUtil;
 import com.github.rxyor.distributed.redisson.delay.config.DelayConfig;
 import java.util.ArrayList;
 import java.util.List;

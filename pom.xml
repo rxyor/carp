@@ -65,6 +65,7 @@
         <servlet.api.version>4.0.0</servlet.api.version>
         <jstl.version>1.2</jstl.version>
         <netty-all.version>4.1.36.Final</netty-all.version>
+        <httpclient.version>4.5.9</httpclient.version>
     </properties>
 
     <!--依赖管理-->
@@ -210,7 +211,11 @@
                 <artifactId>netty-all</artifactId>
                 <version>${netty-all.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

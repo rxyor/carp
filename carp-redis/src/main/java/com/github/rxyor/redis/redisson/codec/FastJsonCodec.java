@@ -3,7 +3,7 @@ package com.github.rxyor.redis.redisson.codec;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.github.rxyor.common.util.CharSequenceUtil;
+import com.github.rxyor.common.util.string.CharSequenceUtil;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufUtil;
 import java.nio.CharBuffer;

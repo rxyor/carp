@@ -1,4 +1,4 @@
-package com.github.rxyor.common.util;
+package com.github.rxyor.common.util.string;
 
 import java.nio.charset.Charset;
 
