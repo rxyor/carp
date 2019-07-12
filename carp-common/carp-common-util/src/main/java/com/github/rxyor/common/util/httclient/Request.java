@@ -53,11 +53,6 @@ public class Request {
 
     private TypeReference resultType;
 
-    private String host;
-
-    private Integer port;
-
-
     private HttpConnConfig httpConnConfig;
 
     private final List<NameValuePair> params = new ArrayList<>(16);
@@ -162,11 +157,13 @@ public class Request {
             return RUtil.fail();
         }
 
-        R result = new R();
         int statusCode = Optional.ofNullable(response.getStatusLine())
             .map(StatusLine::getStatusCode).orElse(500);
 
-        result.setCode(statusCode);
+        R result = new R();
+        result.code(statusCode);
+        result.msg(Optional.ofNullable(response.getStatusLine()).map(StatusLine::getReasonPhrase).orElse(null));
+
         if (SUCCESS != statusCode) {
             result.success(false);
         }
@@ -207,6 +204,9 @@ public class Request {
     private HttpUriRequest buildHttpUriRequest(RequestBuilder builder) {
         if (builder == null) {
             return null;
+        }
+        if (httpConnConfig == null) {
+            httpConnConfig = HttpConnConfig.builder().build();
         }
         builder.setUri(url).setConfig(httpConnConfig.getRequestConfig());
         if (params != null && params.size() > 0) {

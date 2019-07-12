@@ -16,10 +16,14 @@ public class RequestTest {
 
     @Test
     public void get() {
-        String url = "http://putuo.dev.dasouche.net/wholesale/shoppingCartController/queryAllItems.json";
-        R result = Request.url(url)
-            .header("_security_token", "04_W77p_LaM7ZYxocq")
-            .get();
-        System.out.println(result);
+        try {
+            String url = "http://putuo.dev.dasouche.net/wholesale/shoppingCartController/queryAllItems.json";
+            R result = Request.url(url)
+                .header("_security_token", "04_W77p_LaM7ZYxocq")
+                .get();
+            System.out.println(result.getData());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
