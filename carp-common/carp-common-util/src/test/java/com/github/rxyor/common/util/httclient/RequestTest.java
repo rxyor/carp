@@ -1,6 +1,6 @@
 package com.github.rxyor.common.util.httclient;
 
-import org.apache.http.Header;
+import com.github.rxyor.common.core.model.R;
 import org.junit.Test;
 
 /**
@@ -16,7 +16,10 @@ public class RequestTest {
 
     @Test
     public void get() {
-        Header header;
-
+        String url = "http://putuo.dev.dasouche.net/wholesale/shoppingCartController/queryAllItems.json";
+        R result = Request.url(url)
+            .header("_security_token", "04_W77p_LaM7ZYxocq")
+            .get();
+        System.out.println(result);
     }
 }
