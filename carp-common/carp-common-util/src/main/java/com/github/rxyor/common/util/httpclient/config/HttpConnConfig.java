@@ -1,4 +1,4 @@
-package com.github.rxyor.common.util.httclient.config;
+package com.github.rxyor.common.util.httpclient.config;
 
 import java.net.InetAddress;
 import java.util.Collection;

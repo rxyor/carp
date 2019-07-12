@@ -1,4 +1,4 @@
-package com.github.rxyor.common.util.httclient;
+package com.github.rxyor.common.util.httpclient;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -7,7 +7,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.github.rxyor.common.core.exception.CarpIOException;
 import com.github.rxyor.common.core.model.R;
 import com.github.rxyor.common.core.util.RUtil;
-import com.github.rxyor.common.util.httclient.config.HttpConnConfig;
+import com.github.rxyor.common.util.httpclient.config.HttpConnConfig;
 import com.github.rxyor.common.util.io.IOUtil;
 import java.io.IOException;
 import java.nio.charset.Charset;

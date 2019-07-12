@@ -1,4 +1,4 @@
-package com.github.rxyor.common.util.httclient;
+package com.github.rxyor.common.util.httpclient;
 
 import com.alibaba.fastjson.TypeReference;
 import com.github.rxyor.common.core.model.R;
