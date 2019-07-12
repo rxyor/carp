@@ -17,10 +17,8 @@ public class RequestTest {
     @Test
     public void get() {
         try {
-            String url = "http://putuo.dev.dasouche.net/wholesale/shoppingCartController/queryAllItems.json";
-            R result = Request.url(url)
-                .header("_security_token", "04_W77p_LaM7ZYxocq")
-                .get();
+            String url = "https://kunpeng.csdn.net/ad/template/237?positionId=62";
+            R result = Request.url(url).get();
             System.out.println(result.getData());
         } catch (Exception e) {
             e.printStackTrace();
