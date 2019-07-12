@@ -303,7 +303,7 @@ public class Request {
     private R execute(Method method) {
         HttpUriRequest requestMethod = this.switchRequestMethod(method);
         CloseableHttpClient client = this.borrowConnection();
-        HttpResponse response = null;
+        HttpResponse response;
         try {
             response = client.execute(requestMethod);
         } catch (IOException e) {
