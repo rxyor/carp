@@ -61,6 +61,7 @@
         <spring.version>5.1.7.RELEASE</spring.version>
         <servlet.api.version>4.0.0</servlet.api.version>
         <jstl.version>1.2</jstl.version>
+        <httpclient.version>4.5.9</httpclient.version>
     </properties>
 
     <!--依赖管理-->
@@ -200,6 +201,11 @@
                 <groupId>javax.servlet</groupId>
                 <artifactId>jstl</artifactId>
                 <version>${jstl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
             </dependency>
 
         </dependencies>
