@@ -32,7 +32,7 @@ public class HttpConnConfig {
         this.connectionManager = connectionManager;
     }
 
-    public static Builder build() {
+    public static Builder builder() {
         return new HttpConnConfig.Builder();
     }
 
