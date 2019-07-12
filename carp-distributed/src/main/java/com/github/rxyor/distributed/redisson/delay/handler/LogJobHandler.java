@@ -1,6 +1,6 @@
 package com.github.rxyor.distributed.redisson.delay.handler;
 
-import com.github.rxyor.common.util.TimeUtil;
+import com.github.rxyor.common.util.time.TimeUtil;
 import com.github.rxyor.distributed.redisson.delay.core.DelayJob;
 import com.github.rxyor.distributed.redisson.delay.core.DelayResult;
 import com.github.rxyor.distributed.redisson.delay.core.DelayClientProxy;

@@ -1,4 +1,4 @@
-package com.github.rxyor.common.util;
+package com.github.rxyor.common.util.lang;
 
 import java.util.HashMap;
 import java.util.Map;

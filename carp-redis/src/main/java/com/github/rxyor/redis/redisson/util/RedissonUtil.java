@@ -1,6 +1,6 @@
 package com.github.rxyor.redis.redisson.util;
 
-import com.github.rxyor.common.util.FileUtil;
+import com.github.rxyor.common.util.io.FileUtil;
 import com.github.rxyor.redis.core.exception.RedissonConfigException;
 import java.io.IOException;
 import java.util.Objects;

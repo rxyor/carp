@@ -19,7 +19,6 @@
         <module>carp-redis</module>
         <module>carp-distributed</module>
         <module>carp-common</module>
-        <module>carp-example</module>
         <module>carp-spring</module>
     </modules>
 

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:rxyor="http://github.com/schema/rxyor"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://github.com/schema/rxyor http://github.com/schema/rxyor.xsd">
-    <rxyor:redis id="redisConnConfig" database="0" host="127.0.0.1" port="6379"/>
-</beans>
