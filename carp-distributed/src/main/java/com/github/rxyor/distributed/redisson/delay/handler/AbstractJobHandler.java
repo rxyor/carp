@@ -1,6 +1,6 @@
 package com.github.rxyor.distributed.redisson.delay.handler;
 
-import com.github.rxyor.common.util.common.RandomUtil;
+import com.github.rxyor.common.util.lang.RandomUtil;
 import com.github.rxyor.distributed.redisson.delay.core.DelayJob;
 import com.github.rxyor.distributed.redisson.delay.core.DelayResult;
 import com.github.rxyor.distributed.redisson.delay.core.DelayValidUtil;

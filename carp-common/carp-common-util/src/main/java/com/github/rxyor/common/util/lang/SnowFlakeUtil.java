@@ -1,4 +1,4 @@
-package com.github.rxyor.common.util.common;
+package com.github.rxyor.common.util.lang;
 
 import java.util.Objects;
 import lombok.Getter;

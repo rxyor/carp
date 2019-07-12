@@ -1,4 +1,4 @@
-package com.github.rxyor.common.util.date;
+package com.github.rxyor.common.util.time;
 
 /**
  *<p>

@@ -1,6 +1,6 @@
 package com.github.rxyor.common.util;
 
-import com.github.rxyor.common.util.common.RandomUtil;
+import com.github.rxyor.common.util.lang.RandomUtil;
 import org.junit.Test;
 
 /**

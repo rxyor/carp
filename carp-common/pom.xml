@@ -15,7 +15,6 @@
     <modules>
         <module>carp-common-util</module>
         <module>carp-common-core</module>
-        <module>carp-common-netty</module>
     </modules>
 
     <properties>
