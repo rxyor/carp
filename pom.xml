@@ -40,6 +40,7 @@
         <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
         <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+        <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
         <!--modules-->
         <carp-spring.version>1.0.1</carp-spring.version>
         <carp-redis.version>1.0.1</carp-redis.version>
@@ -347,6 +348,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven-javadoc-plugin.version}</version>
                         <configuration>
                             <encoding>UTF-8</encoding>
                             <charset>UTF-8</charset>
