@@ -125,6 +125,13 @@ public class CellUtil {
         }
     }
 
+    /**
+     * 将Object转为期望类型
+     *
+     * @param value 原值
+     * @param expectedType 期望类型
+     * @return 期望的值
+     */
     private static Object convertType(Object value, Class expectedType) {
         if (value == null) {
             return null;
@@ -133,6 +140,7 @@ public class CellUtil {
             return value;
         }
 
+        //如果是期望的类型直接返回
         if (value.getClass().equals(expectedType)) {
             return value;
         }
@@ -170,6 +178,12 @@ public class CellUtil {
         return value;
     }
 
+    /**
+     * 处理Boolean值
+     *
+     * @param value 值
+     * @return
+     */
     private static Boolean parseBoolean(String value) {
         if ("true".equals(value)) {
             return true;
@@ -179,6 +193,12 @@ public class CellUtil {
         return null;
     }
 
+    /**
+     * 处理日期
+     *
+     * @param value 值
+     * @return
+     */
     private static Date parseDate(String value) {
         return DateUtil.parse(value);
     }

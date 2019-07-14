@@ -39,22 +39,49 @@ import org.apache.poi.ss.usermodel.Workbook;
  */
 public class ExcelHelper<T> {
 
+    /**
+     * java 对象类型
+     */
     private final Class<T> type;
 
+    /**
+     * 导入使用NIO
+     */
     private Boolean useNIO = false;
 
+    /**
+     * 导入数据源模式
+     */
     private Mode mode;
 
+    /**
+     * 导入文件路径
+     */
     private String path;
 
+    /**
+     * 导入文件
+     */
     private File file;
 
-    private Collection<T> data;
-
+    /**
+     * 导入输入流
+     */
     private InputStream inputStream;
 
-    private Workbook inputWorkbook;
+    /**
+     * 导出数据集合
+     */
+    private Collection<T> data;
 
+    /**
+     * 导入工作簿
+     */
+    private Workbook importWorkbook;
+
+    /**
+     * 导出工作簿
+     */
     private Workbook exportWorkbook;
 
     private ExcelHelper(Class<T> type) {
@@ -62,39 +89,78 @@ public class ExcelHelper<T> {
         this.type = type;
     }
 
+    /**
+     * 生成一个实例
+     *
+     * @param type java 对象类型
+     * @param <C> 类型
+     * @return ExcelHelper
+     */
     public static <C> ExcelHelper<C> instance(Class<C> type) {
         return new ExcelHelper<>(type);
     }
 
+    /**
+     * 是否使用NIO
+     *
+     * @param useNIO Boolean
+     * @return
+     */
     public ExcelHelper<T> useNIO(Boolean useNIO) {
         this.useNIO = (useNIO == null || !useNIO) ? false : true;
         return this;
     }
 
+    /**
+     * 导入Excel
+     *
+     * @return
+     */
     public List<T> doImport() {
-        this.createInputWorkbook();
-        return this.parseExcel(this.inputWorkbook);
+        this.createImportWorkbook();
+        return this.parseExcel(this.importWorkbook);
     }
 
+    /**
+     * 设置导入文件路径
+     *
+     * @param path 文件路径
+     * @return
+     */
     public ExcelHelper<T> input(String path) {
         this.mode = Mode.PATH;
         this.path = path;
         return this;
     }
 
+    /**
+     * 设置导入文件
+     *
+     * @param file 文件
+     * @return
+     */
     public ExcelHelper<T> input(File file) {
         this.mode = Mode.FILE;
         this.file = file;
         return this;
     }
 
+    /**
+     * 设置导入文件流
+     *
+     * @param inputStream 输入流
+     * @return
+     */
     public ExcelHelper<T> input(InputStream inputStream) {
         this.mode = Mode.INPUT_STREAM;
         this.inputStream = inputStream;
         return this;
     }
 
-    private void createInputWorkbook() {
+    /**
+     * 创建导入工作簿
+     */
+    private void createImportWorkbook() {
         Objects.requireNonNull(mode, "you must set input of path or file or inputStream...");
         InputStream is = null;
         try {
@@ -102,26 +168,26 @@ public class ExcelHelper<T> {
                 switch (mode) {
                     case PATH:
                         is = new ByteArrayInputStream(NIOUtil.readFile(this.path));
-                        this.inputWorkbook = WorkbookUtil.createXSSFWorkbook(is);
+                        this.importWorkbook = WorkbookUtil.createXSSFWorkbook(is);
                         break;
                     case FILE:
                         is = new ByteArrayInputStream(NIOUtil.readFile(this.file));
-                        this.inputWorkbook = WorkbookUtil.createXSSFWorkbook(is);
+                        this.importWorkbook = WorkbookUtil.createXSSFWorkbook(is);
                         break;
                     default:
-                        this.inputWorkbook = WorkbookUtil.createXSSFWorkbook(this.inputStream);
+                        this.importWorkbook = WorkbookUtil.createXSSFWorkbook(this.inputStream);
                         break;
                 }
             } else {
                 switch (mode) {
                     case PATH:
-                        this.inputWorkbook = WorkbookUtil.createXSSFWorkbook(this.path);
+                        this.importWorkbook = WorkbookUtil.createXSSFWorkbook(this.path);
                         break;
                     case FILE:
-                        this.inputWorkbook = WorkbookUtil.createXSSFWorkbook(this.file);
+                        this.importWorkbook = WorkbookUtil.createXSSFWorkbook(this.file);
                         break;
                     case INPUT_STREAM:
-                        this.inputWorkbook = WorkbookUtil.createXSSFWorkbook(this.inputStream);
+                        this.importWorkbook = WorkbookUtil.createXSSFWorkbook(this.inputStream);
                         break;
                     default:
                         break;
@@ -135,6 +201,12 @@ public class ExcelHelper<T> {
         }
     }
 
+    /**
+     * 解析Excel
+     *
+     * @param workbook 导入工作簿
+     * @return 对象List
+     */
     private List<T> parseExcel(Workbook workbook) {
         Sheet sheet = workbook.getSheetAt(0);
         if (workbook == null || sheet == null) {
@@ -143,6 +215,12 @@ public class ExcelHelper<T> {
         return readData(sheet);
     }
 
+    /**
+     * 读取Excel文件的标题行
+     *
+     * @param sheet 报表
+     * @return TitleFieldColumn List
+     */
     private List<TitleFieldColumn> readTitle(Sheet sheet) {
         if (sheet == null || sheet.getRow(0) == null) {
             return new ArrayList<>(0);
@@ -159,6 +237,12 @@ public class ExcelHelper<T> {
         return titleFieldColumns;
     }
 
+    /**
+     * 读取数据数据行
+     *
+     * @param sheet 报表
+     * @return
+     */
     private List<T> readData(Sheet sheet) {
         if (sheet == null) {
             return new ArrayList<>(0);
@@ -184,6 +268,13 @@ public class ExcelHelper<T> {
         return data;
     }
 
+    /**
+     * 读取单行数据
+     *
+     * @param row 行
+     * @param titleFieldColumns
+     * @return java 对象
+     */
     private T readRow(Row row, List<TitleFieldColumn> titleFieldColumns) {
         if (HashMap.class.equals(type) || AbstractMap.class.equals(type)) {
             return (T) readMapRow(row, titleFieldColumns);
@@ -192,6 +283,13 @@ public class ExcelHelper<T> {
         }
     }
 
+    /**
+     * 目标对象是pojo时，读取单行数据
+     *
+     * @param row 行
+     * @param titleFieldColumns
+     * @return java Pojo对象
+     */
     private T readPojoRow(Row row, List<TitleFieldColumn> titleFieldColumns) {
         T instance = ReflectUtil.newInstance(type);
         for (int i = 0; i < titleFieldColumns.size(); i++) {
@@ -209,6 +307,13 @@ public class ExcelHelper<T> {
         return instance;
     }
 
+    /**
+     * 目标对象是map时，读取单行数据
+     *
+     * @param row 行
+     * @param titleFieldColumns
+     * @return hash map
+     */
     private Map<String, Object> readMapRow(Row row, List<TitleFieldColumn> titleFieldColumns) {
         Map<String, Object> rowData = new HashMap<>(32);
         for (int i = 0; i < titleFieldColumns.size(); i++) {
@@ -218,6 +323,11 @@ public class ExcelHelper<T> {
         return rowData;
     }
 
+    /**
+     *Excel标题与Java 对象的Filed匹配
+     *
+     * @param titleColumns
+     */
     private void matchAndSetFieldByTitle(List<TitleFieldColumn> titleColumns) {
         Field[] fields = Optional.ofNullable(type).map(Class::getDeclaredFields)
             .orElse(new Field[0]);
@@ -230,24 +340,46 @@ public class ExcelHelper<T> {
         titleColumns.forEach(column -> column.setField(map.get(column.title)));
     }
 
+    /**
+     * 导出Excel
+     *
+     * @return
+     */
     public byte[] doExport() {
         List<TitleFieldColumn> titleFieldColumns = this.generateTitle();
-        this.createOutputWorkbook(titleFieldColumns);
+        this.createExportWorkbook(titleFieldColumns);
         this.writeData(1, titleFieldColumns);
         WorkbookUtil.autoSizeColumn(this.exportWorkbook.getSheetAt(0), titleFieldColumns.size());
         return this.writeExportWorkbook2Byes();
     }
 
+    /**
+     * 设置导出的数据
+     *
+     * @param data 要导出的数据
+     * @return
+     */
     public ExcelHelper<T> input(Collection<T> data) {
         this.data = data;
         return this;
     }
 
-    private void createOutputWorkbook(List<TitleFieldColumn> titleFieldColumns) {
+    /**
+     * 创建导出工作簿
+     *
+     * @param titleFieldColumns
+     */
+    private void createExportWorkbook(List<TitleFieldColumn> titleFieldColumns) {
         List<String> titles = titleFieldColumns.stream().map(TitleFieldColumn::getTitle).collect(Collectors.toList());
         this.exportWorkbook = WorkbookUtil.createXSSFWorkbookWithTitle(titles);
     }
 
+    /**
+     * 写数据到工作簿
+     *
+     * @param beginRowIndex 开始行的索引
+     * @param titleFieldColumns
+     */
     private void writeData(int beginRowIndex, List<TitleFieldColumn> titleFieldColumns) {
         if (data == null || data.size() == 0) {
             return;
@@ -259,6 +391,15 @@ public class ExcelHelper<T> {
         }
     }
 
+    /**
+     * 写入行到工作簿
+     *
+     * @param titleFieldColumns
+     * @param offset 当前行索引
+     * @param sheet 报表
+     * @param item 数据项
+     * @return 最新行索引
+     */
     private int writeRow(List<TitleFieldColumn> titleFieldColumns, int offset, Sheet sheet, T item) {
         if (item == null) {
             return offset;
@@ -279,6 +420,11 @@ public class ExcelHelper<T> {
         return offset;
     }
 
+    /**
+     * 导出Excel为字节数组
+     *
+     * @return byte[]
+     */
     private byte[] writeExportWorkbook2Byes() {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
@@ -291,6 +437,11 @@ public class ExcelHelper<T> {
         }
     }
 
+    /**
+     * 读取标题
+     *
+     * @return
+     */
     public List<TitleFieldColumn> generateTitle() {
         Field[] fields = Optional.ofNullable(type).map(Class::getDeclaredFields)
             .orElse(new Field[0]);
@@ -309,6 +460,24 @@ public class ExcelHelper<T> {
         return list;
     }
 
+    /**
+     * 清空配置
+     *
+     * @return
+     */
+    public ExcelHelper<T> clear() {
+        this.path = null;
+        this.file = null;
+        this.inputStream = null;
+        this.data = null;
+        this.importWorkbook = null;
+        this.exportWorkbook = null;
+        return this;
+    }
+
+    /**
+     * 包装列对象
+     */
     @Data
     public class TitleFieldColumn {
 
@@ -342,6 +511,9 @@ public class ExcelHelper<T> {
         }
     }
 
+    /**
+     * 数据来源模式
+     */
     private enum Mode {
         PATH,
         FILE,

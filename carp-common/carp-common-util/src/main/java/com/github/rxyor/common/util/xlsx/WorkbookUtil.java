@@ -25,6 +25,10 @@ public class WorkbookUtil {
     private WorkbookUtil() {
     }
 
+    /**
+     * 创建空工作簿
+     * @return
+     */
     public static XSSFWorkbook createXSSFWorkbook() {
         try {
             return XSSFWorkbookFactory.createWorkbook();
