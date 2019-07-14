@@ -44,7 +44,7 @@ public class ExcelHelperTest {
     public void export1() {
         String path = FileUtil.findRealPathByClasspath(this.getClass(), "/");
         path = path + "excel/Girl_" + TimeUtil.getCurrentSeconds() + ".xlsx";
-        List<Girl> girls = this.mockGirls(65588);
+        List<Girl> girls = this.mockGirls(2000);
         byte[] bytes = ExcelHelper.instance(Girl.class).input(girls).doExport();
         NIOUtil.writeFile(path, bytes);
     }
