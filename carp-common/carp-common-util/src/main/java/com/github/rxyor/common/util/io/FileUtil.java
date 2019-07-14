@@ -86,5 +86,25 @@ public class FileUtil {
         }
     }
 
+    public static File createFileIfNotExist(String path) {
+        if (path == null || path.trim().length() == 0) {
+            throw new FileNotExistException("file:" + path + " has error!");
+        }
+
+        File file = new File(path);
+        File parent = file.getParentFile();
+        while (parent != null && !parent.exists()) {
+            parent.mkdirs();
+            parent = parent.getParentFile();
+        }
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                throw new CarpIOException(e);
+            }
+        }
+        return file;
+    }
 
 }

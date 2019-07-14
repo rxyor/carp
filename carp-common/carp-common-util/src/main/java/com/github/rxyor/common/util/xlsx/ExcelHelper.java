@@ -263,8 +263,8 @@ public class ExcelHelper<T> {
         if (item == null) {
             return offset;
         }
+        Row row = sheet.createRow(offset++);
         for (int i = 0; i < titleFieldColumns.size(); i++) {
-            Row row = sheet.createRow(offset++);
             Cell cell = row.createCell(i);
             Field field = Optional.ofNullable(titleFieldColumns.get(i)).map(TitleFieldColumn::getField)
                 .orElse(null);
