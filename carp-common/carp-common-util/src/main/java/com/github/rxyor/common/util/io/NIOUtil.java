@@ -12,7 +12,7 @@ import java.nio.channels.FileChannel;
 
 /**
  *<p>
- *
+ *NIO 工具类
  *</p>
  *
  * @author liuyang
@@ -123,17 +123,26 @@ public class NIOUtil {
             return;
         }
         final int capacity = 1024;
-        ByteBuffer buffer = null;
+        int remainDataLen = src.length;
+        ByteBuffer buffer = ByteBuffer.allocate(capacity);
+        int offset = 0;
         try {
-            buffer = ByteBuffer.allocate(capacity);
-            int offset = 0;
-            while (offset < src.length) {
-                int remain = src.length - offset;
-                int limit = (remain > capacity) ? capacity - 1 : remain - 1;
-                buffer.put(src, offset, limit);
-                channel.write(buffer);
-                offset += capacity;
+            while (remainDataLen > capacity) {
+                for (int i = 0; i < capacity; i++) {
+                    buffer.put(src[offset++]);
+                }
                 buffer.flip();
+                channel.write(buffer);
+                remainDataLen -= capacity;
+                buffer.clear();
+            }
+            if (remainDataLen != 0) {
+                buffer = ByteBuffer.allocate(remainDataLen);
+                for (int i = 0; i < remainDataLen; i++) {
+                    buffer.put(src[offset++]);
+                }
+                buffer.flip();
+                channel.write(buffer);
             }
         } catch (IOException e) {
             throw new CarpIOException(e);
