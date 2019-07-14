@@ -65,6 +65,7 @@
         <jstl.version>1.2</jstl.version>
         <netty-all.version>4.1.36.Final</netty-all.version>
         <httpclient.version>4.5.9</httpclient.version>
+        <poi.version>4.0.1</poi.version>
     </properties>
 
     <!--依赖管理-->
@@ -214,6 +215,16 @@
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>${httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

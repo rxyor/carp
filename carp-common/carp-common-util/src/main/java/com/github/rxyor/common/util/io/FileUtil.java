@@ -26,7 +26,7 @@ public class FileUtil {
 
     public static String readTextFromResource(Class clazz, String path) {
         Optional.ofNullable(path).orElseThrow(() -> new IllegalArgumentException("file path can't be null"));
-        Optional.ofNullable(clazz).orElseThrow(() -> new IllegalArgumentException("clazz can't be null"));
+        Optional.ofNullable(clazz).orElseThrow(() -> new IllegalArgumentException("reflect can't be null"));
         String context;
         try {
             context = IOUtils.toString(clazz.getResourceAsStream(path), Charset.forName("utf-8"));
@@ -71,7 +71,7 @@ public class FileUtil {
     }
 
     public static String findRealPathByClasspath(Class clazz, String path) {
-        Objects.requireNonNull(clazz, "clazz  can't be null");
+        Objects.requireNonNull(clazz, "reflect  can't be null");
         Objects.requireNonNull(path, "file path can't be null");
         return clazz.getResource(path).getFile();
     }

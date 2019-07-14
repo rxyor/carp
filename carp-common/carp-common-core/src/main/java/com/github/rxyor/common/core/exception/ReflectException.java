@@ -12,23 +12,23 @@ import lombok.Getter;
  * @date 2019-05-15 Wed 17:13:00
  * @since 1.0.0
  */
-public class NewInstanceException extends ReflectException {
+public class ReflectException extends ClassException {
 
     static final long serialVersionUID = 3626215591603359027L;
 
     @Getter
     protected String msg;
 
-    public NewInstanceException() {
+    public ReflectException() {
         this("duplicate data exception");
     }
 
-    public NewInstanceException(String msg) {
+    public ReflectException(String msg) {
         super(msg);
         this.msg = msg;
     }
 
-    public NewInstanceException(Throwable e) {
+    public ReflectException(Throwable e) {
         super(e.getMessage());
         this.msg = e.getMessage();
     }

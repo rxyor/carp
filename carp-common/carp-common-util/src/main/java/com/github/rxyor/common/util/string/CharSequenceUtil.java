@@ -20,4 +20,11 @@ public class CharSequenceUtil {
     public static String bytes2String(byte[] bytes) {
         return (bytes == null || bytes.length == 0) ? null : new String(bytes, Charset.forName("utf-8"));
     }
+
+    public static String trim(String s) {
+        if (s != null) {
+            return s.trim();
+        }
+        return s;
+    }
 }
