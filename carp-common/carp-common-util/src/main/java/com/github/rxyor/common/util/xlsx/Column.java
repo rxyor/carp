@@ -26,6 +26,6 @@ public @interface Column {
     /**
      * 列下标
      */
-    int index() default 0;
+    int index() default Integer.MAX_VALUE;
 
 }

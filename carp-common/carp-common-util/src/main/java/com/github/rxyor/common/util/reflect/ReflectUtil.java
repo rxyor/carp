@@ -48,4 +48,18 @@ public class ReflectUtil {
         }
     }
 
+    public static Object getFieldValue(Object source, Field field) {
+        if (source == null || field == null) {
+            return null;
+        }
+        try {
+            if (!field.isAccessible()) {
+                field.setAccessible(true);
+            }
+            return field.get(source);
+        } catch (IllegalAccessException e) {
+            throw new ReflectException(e);
+        }
+    }
+
 }

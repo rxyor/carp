@@ -1,5 +1,7 @@
 package com.github.rxyor.common.core.exception;
 
+import lombok.ToString;
+
 /**
  *<p>
  *
@@ -9,6 +11,7 @@ package com.github.rxyor.common.core.exception;
  * @date 2019-05-14 Tue 16:56:00
  * @since 1.0.0
  */
+@ToString(callSuper = true)
 public class ReadFileException extends CarpIOException {
 
     static final long serialVersionUID = -7530132881684972853L;

@@ -69,15 +69,23 @@ public class NIOUtil {
         final int capacity = 1024;
         int len = computeChannelByteSize(((Long) channel.size()).intValue(), capacity);
         byte[] dest = new byte[len];
-        ByteBuffer buffer = ByteBuffer.allocate(capacity);
-        int offset = 0;
-        while (channel.read(buffer) != -1) {
-            byte[] src = buffer.array();
-            System.arraycopy(src, 0, dest, offset, src.length);
-            offset += src.length;
-            buffer.flip();
+        ByteBuffer buffer = null;
+        try {
+            buffer = ByteBuffer.allocate(capacity);
+            int offset = 0;
+            while (channel.read(buffer) != -1) {
+                byte[] src = buffer.array();
+                System.arraycopy(src, 0, dest, offset, src.length);
+                offset += src.length;
+                buffer.flip();
+            }
+        } catch (IOException e) {
+            throw new CarpIOException(e);
+        } finally {
+            if (buffer != null) {
+                buffer.clear();
+            }
         }
-        buffer.clear();
         return dest;
     }
 

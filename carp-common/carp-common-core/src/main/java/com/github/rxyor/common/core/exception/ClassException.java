@@ -2,6 +2,7 @@ package com.github.rxyor.common.core.exception;
 
 
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  *<p>
@@ -12,6 +13,7 @@ import lombok.Getter;
  * @date 2019-05-15 Wed 17:13:00
  * @since 1.0.0
  */
+@ToString(callSuper = true)
 public class ClassException extends RuntimeException {
 
     static final long serialVersionUID = -1783905742222997373L;

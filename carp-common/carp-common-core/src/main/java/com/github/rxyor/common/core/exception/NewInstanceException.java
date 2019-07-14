@@ -2,6 +2,7 @@ package com.github.rxyor.common.core.exception;
 
 
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  *<p>
@@ -12,6 +13,7 @@ import lombok.Getter;
  * @date 2019-05-15 Wed 17:13:00
  * @since 1.0.0
  */
+@ToString(callSuper = true)
 public class NewInstanceException extends ReflectException {
 
     static final long serialVersionUID = 3626215591603359027L;

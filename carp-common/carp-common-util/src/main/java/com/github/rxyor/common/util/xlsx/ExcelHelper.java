@@ -1,21 +1,27 @@
 package com.github.rxyor.common.util.xlsx;
 
 import com.github.rxyor.common.core.exception.CarpIOException;
+import com.github.rxyor.common.util.io.IOUtil;
 import com.github.rxyor.common.util.io.NIOUtil;
 import com.github.rxyor.common.util.reflect.ReflectUtil;
 import com.github.rxyor.common.util.string.CharSequenceUtil;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.Data;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -24,7 +30,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  *<p>
- *
+ *Excel导入导出工具
  *</p>
  *
  * @author liuyang
@@ -43,9 +49,13 @@ public class ExcelHelper<T> {
 
     private File file;
 
+    private Collection<T> data;
+
     private InputStream inputStream;
 
-    private Workbook workbook;
+    private Workbook inputWorkbook;
+
+    private Workbook exportWorkbook;
 
     private ExcelHelper(Class<T> type) {
         Objects.requireNonNull(type, "type can't be null");
@@ -59,6 +69,11 @@ public class ExcelHelper<T> {
     public ExcelHelper<T> useNIO(Boolean useNIO) {
         this.useNIO = (useNIO == null || !useNIO) ? false : true;
         return this;
+    }
+
+    public List<T> doImport() {
+        this.createInputWorkbook();
+        return this.parseExcel(this.inputWorkbook);
     }
 
     public ExcelHelper<T> input(String path) {
@@ -79,42 +94,44 @@ public class ExcelHelper<T> {
         return this;
     }
 
-    public List<T> doImport() {
-        this.initWorkbook();
-        return this.parseExcel(this.workbook);
-    }
-
-    private void initWorkbook() {
+    private void createInputWorkbook() {
         Objects.requireNonNull(mode, "you must set input of path or file or inputStream...");
-        if (useNIO != null && useNIO) {
-            InputStream is = null;
-            switch (mode) {
-                case PATH:
-                    is = new ByteArrayInputStream(NIOUtil.readFile(this.path));
-                    this.workbook = WorkbookUtil.createXSSFWorkbook(is);
-                    break;
-                case FILE:
-                    is = new ByteArrayInputStream(NIOUtil.readFile(this.file));
-                    this.workbook = WorkbookUtil.createXSSFWorkbook(is);
-                    break;
-                default:
-                    this.workbook = WorkbookUtil.createXSSFWorkbook(this.inputStream);
-                    break;
+        InputStream is = null;
+        try {
+            if (useNIO != null && useNIO) {
+                switch (mode) {
+                    case PATH:
+                        is = new ByteArrayInputStream(NIOUtil.readFile(this.path));
+                        this.inputWorkbook = WorkbookUtil.createXSSFWorkbook(is);
+                        break;
+                    case FILE:
+                        is = new ByteArrayInputStream(NIOUtil.readFile(this.file));
+                        this.inputWorkbook = WorkbookUtil.createXSSFWorkbook(is);
+                        break;
+                    default:
+                        this.inputWorkbook = WorkbookUtil.createXSSFWorkbook(this.inputStream);
+                        break;
+                }
+            } else {
+                switch (mode) {
+                    case PATH:
+                        this.inputWorkbook = WorkbookUtil.createXSSFWorkbook(this.path);
+                        break;
+                    case FILE:
+                        this.inputWorkbook = WorkbookUtil.createXSSFWorkbook(this.file);
+                        break;
+                    case INPUT_STREAM:
+                        this.inputWorkbook = WorkbookUtil.createXSSFWorkbook(this.inputStream);
+                        break;
+                    default:
+                        break;
+                }
             }
-        } else {
-            switch (mode) {
-                case PATH:
-                    this.workbook = WorkbookUtil.createXSSFWorkbook(this.path);
-                    break;
-                case FILE:
-                    this.workbook = WorkbookUtil.createXSSFWorkbook(this.file);
-                    break;
-                case INPUT_STREAM:
-                    this.workbook = WorkbookUtil.createXSSFWorkbook(this.inputStream);
-                    break;
-                default:
-                    break;
-            }
+        } catch (Exception e) {
+            throw new CarpIOException(e);
+        } finally {
+            IOUtil.close(is);
+            IOUtil.close(inputStream);
         }
     }
 
@@ -186,6 +203,7 @@ public class ExcelHelper<T> {
             try {
                 ReflectUtil.setFieldValue(instance, titleFieldColumns.get(i).field, value);
             } catch (Exception e) {
+                //ignore exception
             }
         }
         return instance;
@@ -210,6 +228,85 @@ public class ExcelHelper<T> {
             map.put(column.title(), field);
         }
         titleColumns.forEach(column -> column.setField(map.get(column.title)));
+    }
+
+    public byte[] doExport() {
+        List<TitleFieldColumn> titleFieldColumns = this.generateTitle();
+        this.createOutputWorkbook(titleFieldColumns);
+        this.writeData(1, titleFieldColumns);
+        WorkbookUtil.autoSizeColumn(this.exportWorkbook.getSheetAt(0), titleFieldColumns.size());
+        return this.writeExportWorkbook2Byes();
+    }
+
+    public ExcelHelper<T> input(Collection<T> data) {
+        this.data = data;
+        return this;
+    }
+
+    private void createOutputWorkbook(List<TitleFieldColumn> titleFieldColumns) {
+        List<String> titles = titleFieldColumns.stream().map(TitleFieldColumn::getTitle).collect(Collectors.toList());
+        this.exportWorkbook = WorkbookUtil.createXSSFWorkbookWithTitle(titles);
+    }
+
+    private void writeData(int beginRowIndex, List<TitleFieldColumn> titleFieldColumns) {
+        if (data == null || data.size() == 0) {
+            return;
+        }
+        int offset = (beginRowIndex < 0) ? 0 : beginRowIndex;
+        Sheet sheet = this.exportWorkbook.getSheetAt(0);
+        for (T item : data) {
+            offset = writeRow(titleFieldColumns, offset, sheet, item);
+        }
+    }
+
+    private int writeRow(List<TitleFieldColumn> titleFieldColumns, int offset, Sheet sheet, T item) {
+        if (item == null) {
+            return offset;
+        }
+        for (int i = 0; i < titleFieldColumns.size(); i++) {
+            Row row = sheet.createRow(offset++);
+            Cell cell = row.createCell(i);
+            Field field = Optional.ofNullable(titleFieldColumns.get(i)).map(TitleFieldColumn::getField)
+                .orElse(null);
+            Object value = null;
+            try {
+                value = ReflectUtil.getFieldValue(item, field);
+            } catch (Exception e) {
+                //ignore exception
+            }
+            CellUtil.setCellValue(cell, value);
+        }
+        return offset;
+    }
+
+    private byte[] writeExportWorkbook2Byes() {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            this.exportWorkbook.write(outputStream);
+            return outputStream.toByteArray();
+        } catch (IOException e) {
+            throw new CarpIOException(e);
+        } finally {
+            IOUtil.close(outputStream);
+        }
+    }
+
+    public List<TitleFieldColumn> generateTitle() {
+        Field[] fields = Optional.ofNullable(type).map(Class::getDeclaredFields)
+            .orElse(new Field[0]);
+
+        List<TitleFieldColumn> list = new ArrayList<>(fields.length);
+        for (Field field : fields) {
+            Column column = field.getAnnotation(Column.class);
+            int index = Optional.ofNullable(column).map(Column::index).orElse(Integer.MAX_VALUE);
+            String title = Optional.ofNullable(column).map(Column::title).orElse(null);
+            if (title == null || title.trim().length() == 0) {
+                continue;
+            }
+            list.add(new TitleFieldColumn(index, title, field));
+        }
+        list.sort(Comparator.comparingInt(value -> value.index));
+        return list;
     }
 
     @Data
