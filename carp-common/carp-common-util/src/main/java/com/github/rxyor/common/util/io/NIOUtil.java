@@ -24,6 +24,12 @@ public class NIOUtil {
     private NIOUtil() {
     }
 
+    /**
+     * NIO read File to byte[]
+     *
+     * @param path file path
+     * @return byte[]
+     */
     public static byte[] readFile(String path) {
         if (path == null || path.trim().length() == 0) {
             throw new FileNotExistException("file:" + path + " has error!");
@@ -31,6 +37,12 @@ public class NIOUtil {
         return readFile(new File(path));
     }
 
+    /**
+     * NIO read File to byte[]
+     *
+     * @param file java io file
+     * @return byte[]
+     */
     public static byte[] readFile(File file) {
         if (file == null || !file.exists() || file.isDirectory()) {
             throw new FileNotExistException("file not exist!");
@@ -51,6 +63,13 @@ public class NIOUtil {
         }
     }
 
+    /**
+     * read NIO channel
+     *
+     * @param channel NIO channel
+     * @return byte[]
+     * @throws IOException
+     */
     public static byte[] readChannel(FileChannel channel) throws IOException {
         if (channel == null) {
             return null;
@@ -78,6 +97,13 @@ public class NIOUtil {
         return dest;
     }
 
+    /**
+     * FileChannel read from ByteBuffer
+     *
+     * @param channel FileChannel
+     * @param buffer ByteBuffer
+     * @return read offset , -1 is end
+     */
     public static int read(FileChannel channel, ByteBuffer buffer) {
         try {
             return channel.read(buffer);
@@ -86,6 +112,13 @@ public class NIOUtil {
         }
     }
 
+    /**
+     * compute how match size need to  alloc
+     *
+     * @param size channel size
+     * @param capacity ByteBuffer capacity
+     * @return alloc size
+     */
     private static int computeChannelByteSize(int size, int capacity) {
         if (size % capacity == 0) {
             return size;
@@ -93,11 +126,23 @@ public class NIOUtil {
         return (size / capacity + 1) * capacity;
     }
 
+    /**
+     * write byte[] to file
+     *
+     * @param path file path
+     * @param src byte[]
+     */
     public static void writeFile(String path, byte[] src) {
         File file = FileUtil.createFileIfNotExist(path);
         writeFile(file, src);
     }
 
+    /**
+     * write byte[] to file
+     *
+     * @param file file
+     * @param src byte[]
+     */
     public static void writeFile(File file, byte[] src) {
         if (file == null || !file.exists() || file.isDirectory()) {
             throw new FileNotExistException("file not exist!");
@@ -118,6 +163,12 @@ public class NIOUtil {
         }
     }
 
+    /**
+     * write byte[] to FileChannel
+     *
+     * @param channel FileChannel
+     * @param src byte[]
+     */
     public static void writeChannel(FileChannel channel, byte[] src) {
         if (channel == null || src == null || src.length == 0) {
             return;
