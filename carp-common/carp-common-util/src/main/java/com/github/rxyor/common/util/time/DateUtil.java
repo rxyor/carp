@@ -1,6 +1,7 @@
 package com.github.rxyor.common.util.time;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -119,11 +120,33 @@ public class DateUtil {
      * @return Date
      */
     public static Date parse(String str, String format) {
-        if (str == null || str.length() == 0
+        if (str == null || str.trim().length() == 0
             || format == null || format.length() == 0) {
             throw new IllegalArgumentException(str + " can't be converted to date which use format: " + format);
         }
         LocalDateTime ldt = LocalDateTime.parse(str, DateTimeFormatter.ofPattern(format));
         return localDateTime2Date(ldt);
+    }
+
+    /**
+     * 日期转String格式
+     *
+     * @param date 日期
+     * @param format 格式
+     * @return String格式的日期
+     */
+    public static String date2String(Date date, String format) {
+        if (date == null) {
+            return null;
+        }
+        if (format == null || format.trim().trim().length() == 0) {
+            throw new IllegalArgumentException("Not supported date format: " + format);
+        }
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(format);
+            return sdf.format(date);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Not supported date format: " + format);
+        }
     }
 }

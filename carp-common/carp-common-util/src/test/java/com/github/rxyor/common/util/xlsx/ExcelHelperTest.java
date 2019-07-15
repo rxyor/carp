@@ -71,6 +71,8 @@ public class ExcelHelperTest {
             girl.setAge(19);
             girl.setHeight(1.68F + 0.001F * i);
             girl.setWeight(45F + 0.001F * i);
+            girl.setHairColor("黑色");
+            girl.setEyeColor("灰色");
             data.add(girl);
         }
 

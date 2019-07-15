@@ -329,10 +329,9 @@ public class ExcelHelper<T> {
      * @param titleColumns
      */
     private void matchAndSetFieldByTitle(List<TitleFieldColumn> titleColumns) {
-        Field[] fields = Optional.ofNullable(type).map(Class::getDeclaredFields)
-            .orElse(new Field[0]);
+        List<Field> fields = ReflectUtil.getDeclaredFields(type, true);
 
-        Map<String, Field> map = new HashMap<>(fields.length);
+        Map<String, Field> map = new HashMap<>(fields.size());
         for (Field field : fields) {
             Column column = field.getAnnotation(Column.class);
             map.put(column.title(), field);
@@ -443,10 +442,9 @@ public class ExcelHelper<T> {
      * @return
      */
     public List<TitleFieldColumn> generateTitle() {
-        Field[] fields = Optional.ofNullable(type).map(Class::getDeclaredFields)
-            .orElse(new Field[0]);
+        List<Field> fields = ReflectUtil.getDeclaredFields(type, true);
 
-        List<TitleFieldColumn> list = new ArrayList<>(fields.length);
+        List<TitleFieldColumn> list = new ArrayList<>(fields.size());
         for (Field field : fields) {
             Column column = field.getAnnotation(Column.class);
             int index = Optional.ofNullable(column).map(Column::index).orElse(Integer.MAX_VALUE);

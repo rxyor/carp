@@ -2,6 +2,7 @@ package com.github.rxyor.common.util.xlsx.test;
 
 import com.github.rxyor.common.util.xlsx.Column;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  *<p>
@@ -13,7 +14,8 @@ import lombok.Data;
  * @since 1.0.0
  */
 @Data
-public class Girl {
+@ToString(callSuper = true)
+public class Girl extends Human {
 
     @Column(index = 0, title = "姓名")
     private String name;
