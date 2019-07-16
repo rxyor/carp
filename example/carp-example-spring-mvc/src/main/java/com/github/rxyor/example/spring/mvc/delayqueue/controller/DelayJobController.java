@@ -4,6 +4,8 @@ import com.github.rxyor.common.core.model.R;
 import com.github.rxyor.common.core.util.RUtil;
 import com.github.rxyor.distributed.redisson.delay.core.DelayClientProxy;
 import com.github.rxyor.distributed.redisson.delay.core.DelayJob;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2019-05-29 Wed 14:56:00
  * @since 1.0.0
  */
+@Api(value = "delay_job_controller")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/delay")
@@ -28,6 +31,7 @@ public class DelayJobController {
 
     private final DelayClientProxy delayClientProxy;
 
+    @ApiOperation(value = "添加一个延时任务", httpMethod = "POST")
     @PostMapping("/job/add")
     @ResponseBody
     public R addDelayJob(@RequestBody DelayJob<Map<String, Object>> delayJob) {

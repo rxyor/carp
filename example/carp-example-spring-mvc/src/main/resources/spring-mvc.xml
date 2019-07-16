@@ -14,7 +14,7 @@
         </property>
     </bean>
 
-    <context:component-scan base-package="com.github.rxyor.**.controller"/>
+    <context:component-scan base-package="com.github.rxyor.example.spring.mvc"/>
 
     <mvc:annotation-driven>
         <mvc:message-converters register-defaults="true">
@@ -50,5 +50,9 @@
         <!-- 10*1024*1024 -->
         <property name="maxUploadSize" value="10485760"/>
     </bean>
+
+    <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>
+    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
+    <bean class="com.github.rxyor.example.spring.mvc.delayqueue.config.SwaggerConfiguration" />
 
 </beans>
