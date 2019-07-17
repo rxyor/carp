@@ -14,7 +14,7 @@
 <dependency>
   <groupId>com.github.rxyor</groupId>
   <artifactId>carp-parent</artifactId>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <type>pom</type>
 </dependency>
 ```
@@ -26,3 +26,6 @@
 https://blog.csdn.net/liuyanglglg/article/details/95952953
 ```
 2. Redis延时队列
+```
+https://blog.csdn.net/liuyanglglg/article/details/96299435
+```

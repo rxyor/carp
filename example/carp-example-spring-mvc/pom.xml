@@ -99,17 +99,6 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
         </dependency>
-
-        <!--        <dependency>-->
-<!--            <groupId>org.apache.logging.log4j</groupId>-->
-<!--            <artifactId>log4j-to-slf4j</artifactId>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>org.slf4j</groupId>-->
-<!--            <artifactId>slf4j-nop</artifactId>-->
-<!--        </dependency>-->
-
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-web</artifactId>

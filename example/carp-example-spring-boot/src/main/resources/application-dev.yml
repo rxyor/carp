@@ -1,0 +1,18 @@
+server:
+  port: 9547
+  servlet:
+    context-path:
+
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    password:
+    timeout: 10000ms
+    lettuce:
+      pool:
+        max-idle: 8
+        max-wait: -1ms
+logging:
+  config: classpath:log4j2.properties
