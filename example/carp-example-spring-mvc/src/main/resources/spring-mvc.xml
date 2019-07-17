@@ -53,6 +53,6 @@
 
     <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>
     <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
-    <bean class="com.github.rxyor.example.spring.mvc.delayqueue.config.SwaggerConfiguration" />
+    <bean class="com.github.rxyor.example.spring.mvc.delayqueue.config.SwaggerConfig" />
 
 </beans>

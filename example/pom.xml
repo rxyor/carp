@@ -8,7 +8,7 @@
     <artifactId>carp-example-parent</artifactId>
     <version>1.0.4</version>
     <packaging>pom</packaging>
-    <name>carp</name>
+    <name>carp-example</name>
     <description>carp is project which contains common utils ,redis delay job , distributed lock and
         so on!
     </description>
@@ -64,7 +64,7 @@
         <netty-all.version>4.1.36.Final</netty-all.version>
         <httpclient.version>4.5.9</httpclient.version>
         <poi.version>4.0.1</poi.version>
-        <springfox-swagger2.version>2.6.0</springfox-swagger2.version>
+        <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
     </properties>
 
     <!--依赖管理-->

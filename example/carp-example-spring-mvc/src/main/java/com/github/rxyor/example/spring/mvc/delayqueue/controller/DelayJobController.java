@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2019-05-29 Wed 14:56:00
  * @since 1.0.0
  */
-@Api(value = "delay_job_controller")
+@Api(value = "延时队列")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/delay")
