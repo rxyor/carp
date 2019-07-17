@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.Map;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2019-05-29 Wed 14:56:00
  * @since 1.0.0
  */
+@Slf4j
 @Api(value = "延时队列")
 @RestController
 @AllArgsConstructor
@@ -35,6 +37,7 @@ public class DelayJobController {
     @PostMapping("/job/add")
     @ResponseBody
     public R addDelayJob(@RequestBody DelayJob<Map<String, Object>> delayJob) {
+        log.info("received a job ,current time is:{}", System.currentTimeMillis() / 1000);
         if (delayJob.getExecTime() == null) {
             delayJob.setExecTime(System.currentTimeMillis() / 1000 + 10);
         }

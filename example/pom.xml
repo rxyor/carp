@@ -52,6 +52,9 @@
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <guava.version>23.0</guava.version>
         <lettuce-core.version>5.1.6.RELEASE</lettuce-core.version>
+        <log4j.version>2.12.0</log4j.version>
+        <log4j-web.version>2.12.0</log4j-web.version>
+        <log4j-core.version>2.12.0</log4j-core.version>
         <log4j-to-slf4j.version>2.10.0</log4j-to-slf4j.version>
         <jul-to-slf4j.version>1.7.25</jul-to-slf4j.version>
         <logback-classic.version>1.2.3</logback-classic.version>
@@ -149,12 +152,37 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-web</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-slf4j-impl</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-jul</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-to-slf4j</artifactId>
                 <version>${log4j-to-slf4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
-                <artifactId>jul-to-slf4j</artifactId>
+                <artifactId>slf4j-nop</artifactId>
                 <version>${jul-to-slf4j.version}</version>
             </dependency>
             <dependency>
