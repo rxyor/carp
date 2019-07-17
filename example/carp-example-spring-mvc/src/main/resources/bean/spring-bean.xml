@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://redisson.org/schema/redisson http://redisson.org/schema/redisson/redisson.xsd">
+
+
+    <bean id="fastJsonCodec" class="com.github.rxyor.redis.redisson.codec.FastJsonCodec"/>
+
+    <bean id="delayRedisConfig"
+        class="com.github.rxyor.redis.redisson.config.RedisConfig">
+        <property name="host" value="${redis.host}"/>
+        <property name="port" value="${redis.port}"/>
+        <property name="password" value="${redis.password}"/>
+        <property name="database" value="${redis.database}"/>
+        <property name="codec" ref="fastJsonCodec"/>
+    </bean>
+
+    <bean id="redisDelayJobConfig"
+        class="com.github.rxyor.distributed.redisson.delay.config.DelayConfig">
+        <property name="appName" value="${redis.app}"/>
+    </bean>
+
+    <bean id="scanWrapper" class="com.github.rxyor.distributed.redisson.delay.core.ScanWrapper"
+        init-method="initAndScan" destroy-method="destroy">
+        <property name="delayConfig" ref="redisDelayJobConfig"/>
+        <property name="redisConfig" ref="delayRedisConfig"/>
+        <property name="handlerList">
+            <list>
+                <bean class="com.github.rxyor.distributed.redisson.delay.handler.LogJobHandler">
+                    <property name="topic" value="girl"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="delayClientProxy" factory-bean="scanWrapper" factory-method="getDelayClientProxy"/>
+
+</beans>

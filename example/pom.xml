@@ -5,10 +5,10 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.rxyor</groupId>
-    <artifactId>carp-parent</artifactId>
+    <artifactId>carp-example-parent</artifactId>
     <version>1.0.4</version>
     <packaging>pom</packaging>
-    <name>carp</name>
+    <name>carp-example</name>
     <description>carp is project which contains common utils ,redis delay job , distributed lock and
         so on!
     </description>
@@ -16,10 +16,8 @@
 
     <!--模块-->
     <modules>
-        <module>carp-redis</module>
-        <module>carp-distributed</module>
-        <module>carp-common</module>
-        <module>carp-spring</module>
+        <module>carp-example-spring-mvc</module>
+        <module>carp-example-spring-boot</module>
     </modules>
 
     <!--属性配置-->
@@ -40,12 +38,10 @@
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
         <!--modules-->
-        <carp-spring.version>1.0.4</carp-spring.version>
-        <carp-redis.version>1.0.4</carp-redis.version>
-        <carp-distributed.version>1.0.4</carp-distributed.version>
-        <carp-common.version>1.0.4</carp-common.version>
         <!--dependency-->
         <junit.version>4.12</junit.version>
+        <spring-boot.version>2.0.8.RELEASE</spring-boot.version>
+        <carp.version>1.0.4</carp.version>
         <lombok.version>1.18.0</lombok.version>
         <commons-lang3.version>3.7</commons-lang3.version>
         <commons-collections.version>3.2.2</commons-collections.version>
@@ -54,6 +50,9 @@
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <guava.version>23.0</guava.version>
         <lettuce-core.version>5.1.6.RELEASE</lettuce-core.version>
+        <log4j.version>2.12.0</log4j.version>
+        <log4j-web.version>2.12.0</log4j-web.version>
+        <log4j-core.version>2.12.0</log4j-core.version>
         <log4j-to-slf4j.version>2.10.0</log4j-to-slf4j.version>
         <jul-to-slf4j.version>1.7.25</jul-to-slf4j.version>
         <logback-classic.version>1.2.3</logback-classic.version>
@@ -66,11 +65,26 @@
         <netty-all.version>4.1.36.Final</netty-all.version>
         <httpclient.version>4.5.9</httpclient.version>
         <poi.version>4.0.1</poi.version>
+        <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
     </properties>
 
     <!--依赖管理-->
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-log4j2</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
@@ -114,6 +128,16 @@
                 <version>${guava.version}</version>
             </dependency>
             <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${springfox-swagger2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${springfox-swagger2.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
                 <version>${jackson.version}</version>
@@ -140,12 +164,37 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-web</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-slf4j-impl</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-jul</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-to-slf4j</artifactId>
                 <version>${log4j-to-slf4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
-                <artifactId>jul-to-slf4j</artifactId>
+                <artifactId>slf4j-nop</artifactId>
                 <version>${jul-to-slf4j.version}</version>
             </dependency>
             <dependency>
@@ -225,6 +274,11 @@
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
                 <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.rxyor</groupId>
+                <artifactId>carp-distributed</artifactId>
+                <version>${carp.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

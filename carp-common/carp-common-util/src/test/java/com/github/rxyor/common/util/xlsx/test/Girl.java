@@ -2,6 +2,7 @@ package com.github.rxyor.common.util.xlsx.test;
 
 import com.github.rxyor.common.util.xlsx.Column;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
@@ -14,6 +15,7 @@ import lombok.ToString;
  * @since 1.0.0
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Girl extends Human {
 
