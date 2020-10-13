@@ -39,7 +39,7 @@
         <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
         <!--modules-->
         <!--dependency-->
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <spring-boot.version>2.0.8.RELEASE</spring-boot.version>
         <carp.version>1.0.4</carp.version>
         <lombok.version>1.18.0</lombok.version>
