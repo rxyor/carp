@@ -63,7 +63,7 @@
         <servlet.api.version>4.0.0</servlet.api.version>
         <jstl.version>1.2</jstl.version>
         <netty-all.version>4.1.36.Final</netty-all.version>
-        <httpclient.version>4.5.9</httpclient.version>
+        <httpclient.version>4.5.13</httpclient.version>
         <poi.version>4.0.1</poi.version>
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
     </properties>
