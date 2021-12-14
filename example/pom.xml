@@ -50,7 +50,7 @@
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <guava.version>23.0</guava.version>
         <lettuce-core.version>5.1.6.RELEASE</lettuce-core.version>
-        <log4j.version>2.12.0</log4j.version>
+        <log4j.version>2.16.0</log4j.version>
         <log4j-web.version>2.12.0</log4j-web.version>
         <log4j-core.version>2.12.0</log4j-core.version>
         <log4j-to-slf4j.version>2.10.0</log4j-to-slf4j.version>
