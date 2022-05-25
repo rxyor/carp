@@ -59,7 +59,7 @@
         <fastjson.version>1.2.58</fastjson.version>
         <jackson.version>2.9.8</jackson.version>
         <redisson.version>3.10.7</redisson.version>
-        <spring.version>5.1.7.RELEASE</spring.version>
+        <spring.version>5.2.22.RELEASE</spring.version>
         <servlet.api.version>4.0.0</servlet.api.version>
         <jstl.version>1.2</jstl.version>
         <netty-all.version>4.1.36.Final</netty-all.version>
