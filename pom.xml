@@ -51,7 +51,7 @@
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-pool2.version>2.6.2</commons-pool2.version>
         <commons-io.version>2.6</commons-io.version>
-        <commons-fileupload.version>1.4</commons-fileupload.version>
+        <commons-fileupload.version>1.5</commons-fileupload.version>
         <guava.version>23.0</guava.version>
         <lettuce-core.version>5.1.6.RELEASE</lettuce-core.version>
         <log4j-to-slf4j.version>2.10.0</log4j-to-slf4j.version>
